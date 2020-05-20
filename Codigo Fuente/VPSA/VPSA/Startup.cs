@@ -50,7 +50,7 @@ namespace VPSA
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Denuncias}/{action=Create}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

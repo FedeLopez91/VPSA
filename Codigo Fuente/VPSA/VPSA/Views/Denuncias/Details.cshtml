@@ -1,78 +1,66 @@
 ﻿@model VPSA.Models.Denuncia
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Ver Denuncia";
 }
-
-<h1>Details</h1>
-
-<div>
-    <h4>Denuncia</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Fecha)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Fecha)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Calle)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Calle)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Numero)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Numero)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EntreCalles1)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EntreCalles1)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EntreCalles2)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EntreCalles2)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TipoDenuncia)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TipoDenuncia.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EstadoDenuncia)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EstadoDenuncia.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Legajo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Legajo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IpDenunciante)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IpDenunciante)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<br />
+<div class="row">
+    <div class="col-md-10 offset-1">
+        <div class="card">
+            <div class="card-header text-white" style="background-color: #2990CA;">
+                Información de la  Denuncia
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Fecha)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Fecha)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Calle)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @(!string.IsNullOrWhiteSpace(Model.Calle) ? Model.Calle + " " +Model.Numero: "")
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayName("Entre Calles")
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.EntreCalles1)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Descripcion)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Descripcion)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.TipoDenuncia)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.TipoDenuncia.Nombre)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayName("Infractor")
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.EntreCalles2)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayName("Estado Denuncia")
+                    </dt>
+                    <dd class="col-sm-10">
+                        @(Model.EstadoDenuncia!=null ? Model.EstadoDenuncia.Nombre : "")
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="offset-10">
+                <a asp-action="Index" class="btn btn-outline-info">Volver atrás</a>
+            </div>
+        </div>
+    </div>
 </div>

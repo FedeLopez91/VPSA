@@ -22,7 +22,7 @@ namespace VPSA.Controllers
         // GET: Denuncias
         public async Task<IActionResult> Index()
         {
-            var vPSAContext = _context.Denuncias.Include(d => d.EstadoDenuncia).Include(d => d.TipoDenuncia);
+            var vPSAContext = _context.Denuncias.Include(d => d.EstadoDenuncia).Include(d => d.TipoDenuncia).OrderByDescending(o => o.Fecha);
             return View(await vPSAContext.ToListAsync());
         }
 
@@ -65,6 +65,11 @@ namespace VPSA.Controllers
             _context.Add(denuncia);
             await _context.SaveChangesAsync();
             return Ok(new { success = true, message = "Denuncia generada con Éxito" });
+        }
+
+        public IActionResult ThankYou()
+        {
+            return View();
         }
 
         // GET: Denuncias/Edit/5

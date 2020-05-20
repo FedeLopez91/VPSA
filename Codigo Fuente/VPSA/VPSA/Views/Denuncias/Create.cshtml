@@ -46,15 +46,15 @@
                     <label class="col-md-12">Infractor</label>
                     <input asp-for="EntreCalles2" class="form-control" />
                 </div>
-                @*<div class="form-group">
+                <div class="form-group">
                     <label class="col-md-12">Adjuntar Imágenes</label>
                     <input class="col-md-12"
                            type="file"
                            id="inputGroupFile01"
                            data-toggle="tooltip"
                            data-placement="top"
-                           title="Inserte imagenes de su dispositivo móvil o pc" />
-                </div>*@
+                           title="Inserte imágenes de su dispositivo móvil o pc" />
+                </div>
                 <hr />
                 <div class="form-group text-right">
                     <button type="submit" id="SubmitDenuncia" class="btn btn-info">Crear Denuncia </button>
@@ -96,10 +96,7 @@
                         data: $("#denuncia-form").serialize(),
                         success: function (data) {
                             if (data.success == true) {
-                                $("#denuncia-form").find('input').val("");
-                                $("#Descripcion").text("");
-                                $("#Descripcion").val("");
-                                alert(data.message)
+                                window.location.href = "ThankYou";
                             }
 
                         }

@@ -1,8 +1,106 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    .btn-outline-custom {
+        color: white;
+        background-color: #2990CA;
+    }
+
+        .btn-outline-custom:hover {
+            color: #2990CA;
+            border-color: #2990CA;
+            background-color: white;
+        }
+</style>
+<br />
+<!-- Page Content -->
+<div class="container">
+
+    <!-- Heading Row -->
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-7">
+                <img class="img-fluid rounded mb-4 mb-lg-0" src="~/img/VPSA.png" />
+            </div>
+            <!-- /.col-lg-8 -->
+            <div class="col-md-5" style="margin: auto;">
+                <h2 class="card-title text-center">Villa Parque Santa Ana</h2>
+                <p class="card-text text-justify">
+                    Este es un municipio del departamento Santa María en la provincia de
+                    Córdoba, Argentina. Se encuentra sobre la ruta provincial RP 5, a 11
+                    km al noreste de la ciudad de Alta Gracia y a 25 km al suroeste de
+                    la capital provincial.
+                </p>
+                <hr>
+                <a class="btn btn-outline-custom" href="#" style="width: 100%;">Ver más</a>
+            </div>
+        </div>
+
+        <!-- /.col-md-4 -->
+    </div>
+
+    <!-- /.row -->
+    <!-- Call to Action Well -->
+    <div class="card text-white my-3 py-4 text-center">
+        <div class="card-body">
+            <img src="~/img/Candado.png" />
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row">
+        <div class="col-md-4 mb-5">
+            <div class="card h-100">
+                <div class="card-body">
+                    <p class="card-text text-justify">
+                        <img src="~/img/Obras.jpg" />Porque no nos quedamos en
+                        meras palabras, en este apartado te detallamos en todo lo que
+                        estamos trabajando acualmente, obras de infraestructura que estamos
+                        ejecutando, mantenimiento, y mejoras en la calidad de todo el pueblo
+                        .
+                    </p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="#" class="btn btn-outline-custom btn-sm" style="width: 100%;">Obras en Ejecución</a>
+                </div>
+            </div>
+        </div>
+        <!-- /.col-md-4 -->
+        <div class="col-md-4 mb-5">
+            <div class="card h-100">
+                <div class="card-body">
+                    <p class="card-text text-justify">
+                        <img src="~/img/DEnuncia_Ciudadana.jpg" />
+                        Los pobladores de Villa Parque Santa Ana Tenemos todos los mismos
+                        derechos y obligaciones. En caso que usted presencie un ilícito o
+                        incumpliemiento de una ordenanza puede denunciar el hecho, no dude
+                        en adjuntar pruebas fotográficas.
+                    </p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="/denuncias/create"
+                       class="btn btn-outline-custom btn-sm"
+                       style="width: 100%;">Denuncias</a>
+                </div>
+            </div>
+        </div>
+        <!-- /.col-md-4 -->
+        <div class="col-md-4 mb-5">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h2 class="card-title"></h2>
+                    <p class="card-text text-justify">
+                        <img src="~/img/reclamos.jpg" /> Lorem ipsum dolor sit
+                        amet, consectetur adipisicing elit. Rem magni quas ex numquam,
+                        maxime minus quam molestias corporis quod, ea minima accusamus.
+                    </p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="#" class="btn btn-outline-custom btn-sm" style="width: 100%;">Reclamos</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

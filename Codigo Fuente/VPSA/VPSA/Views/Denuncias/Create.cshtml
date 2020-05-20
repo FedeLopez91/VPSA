@@ -1,0 +1,111 @@
+﻿@model VPSA.Models.Denuncia
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+
+
+<div class="col-md-8 offset-2 mt-2">
+    <div class="card">
+        <div class="card-header text-white" style="background-color: #2990CA;">
+            Cargar Denuncia
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" id="denuncia-form">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label class="col-md-12">Ordenanza infringida</label>
+                    <select asp-for="TipoDenunciaId" class="form-control inputRequired" asp-items="ViewBag.TipoDenunciaId">
+                        <option></option>
+                    </select>
+                    <span id="TipoDenunciaIdValid" class="text-danger inputValidation">*Ordenanza infringida es obligatorio</span>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="col-md-12">Calle</label>
+                        <input asp-for="Calle" class="form-control" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="col-md-12">Número</label>
+                        <input asp-for="Numero" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-12">Entre Calles</label>
+                    <input asp-for="EntreCalles1" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-12">Descripción</label>
+                    <textarea asp-for="Descripcion" class="form-control inputRequired" rows="5" cols="5"></textarea>
+                    <span id="DescripcionValid" class="text-danger inputValidation">*Descripción es Obligatorio</span>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-12">Infractor</label>
+                    <input asp-for="EntreCalles2" class="form-control" />
+                </div>
+                @*<div class="form-group">
+                    <label class="col-md-12">Adjuntar Imágenes</label>
+                    <input class="col-md-12"
+                           type="file"
+                           id="inputGroupFile01"
+                           data-toggle="tooltip"
+                           data-placement="top"
+                           title="Inserte imagenes de su dispositivo móvil o pc" />
+                </div>*@
+                <hr />
+                <div class="form-group text-right">
+                    <button type="submit" id="SubmitDenuncia" class="btn btn-info">Crear Denuncia </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section scripts
+    {
+    <script>
+
+        $(document).ready(function () {
+
+
+
+            $(".inputValidation").hide();
+
+            $("#SubmitDenuncia").click(function (e) {
+
+                e.preventDefault();
+
+                $(".inputValidation").hide();
+
+                var inputToValid = $("#denuncia-form").find(".inputRequired").toArray();
+                var count = 0;
+                inputToValid.forEach(function (input) {
+                    if (input.value == "") {
+                        $("#" + input.name + "Valid").show();
+                        window.scrollTo(0, 0);
+                        count++;
+                    }
+                });
+
+                if (count == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Denuncias/Create",
+                        data: $("#denuncia-form").serialize(),
+                        success: function (data) {
+                            if (data.success == true) {
+                                $("#denuncia-form").find('input').val("");
+                                $("#Descripcion").text("");
+                                $("#Descripcion").val("");
+                                alert(data.message)
+                            }
+
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

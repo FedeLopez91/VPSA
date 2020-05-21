@@ -16,7 +16,7 @@
             <form asp-action="Create" id="denuncia-form">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label class="col-md-12">Ordenanza infringida</label>
+                    <label class="col-md-12">Ordenanza infringida*</label>
                     <select asp-for="TipoDenunciaId" class="form-control inputRequired" asp-items="ViewBag.TipoDenunciaId">
                         <option></option>
                     </select>
@@ -36,9 +36,8 @@
                     <label class="col-md-12">Entre Calles</label>
                     <input asp-for="EntreCalles1" class="form-control" />
                 </div>
-
                 <div class="form-group">
-                    <label class="col-md-12">Descripción</label>
+                    <label class="col-md-12">Descripción*</label>
                     <textarea asp-for="Descripcion" class="form-control inputRequired" rows="5" cols="5"></textarea>
                     <span id="DescripcionValid" class="text-danger inputValidation">*Descripción es Obligatorio</span>
                 </div>

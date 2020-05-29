@@ -64,7 +64,7 @@ namespace VPSA.Controllers
             var nroDenuncia = 0;
             if (_context.Denuncias.Count() > 0)
             {
-                nroDenuncia = _context.Denuncias.Max(x=>x.Id);
+                nroDenuncia = _context.Denuncias.Max(x => x.Id);
             }
             nroDenuncia = nroDenuncia == 0 ? 1 : nroDenuncia + 1;
             denuncia.NroDenuncia = nroDenuncia.ToString("D-00000000#");
@@ -78,6 +78,14 @@ namespace VPSA.Controllers
         {
             var denuncia = await _context.Denuncias.Where(x => x.Id == id).FirstOrDefaultAsync();
             return View(denuncia);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> View(string NroDenuncia)
+        {
+            var denuncia = await _context.Denuncias.Where(x => x.NroDenuncia == NroDenuncia).Include(d => d.EstadoDenuncia)
+                .Include(d => d.TipoDenuncia).FirstOrDefaultAsync();
+            return View("Details", denuncia);
         }
 
         // GET: Denuncias/Edit/5

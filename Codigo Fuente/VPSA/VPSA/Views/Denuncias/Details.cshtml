@@ -4,63 +4,94 @@
     ViewData["Title"] = "Ver Denuncia";
 }
 <br />
-<div class="row">
-    <div class="col-md-10 offset-1">
-        <div class="card">
-            <div class="card-header text-white" style="background-color: #2990CA;">
-                Información de la  Denuncia
-            </div>
-            <div class="card-body">
-                <dl class="row">
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Fecha)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.Fecha)
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Calle)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @(!string.IsNullOrWhiteSpace(Model.Calle) ? Model.Calle + " " +Model.Numero: "")
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayName("Entre Calles")
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.EntreCalles1)
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Descripcion)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.Descripcion)
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.TipoDenuncia)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.TipoDenuncia.Nombre)
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayName("Infractor")
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.EntreCalles2)
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayName("Estado Denuncia")
-                    </dt>
-                    <dd class="col-sm-10">
-                        @(Model.EstadoDenuncia!=null ? Model.EstadoDenuncia.Nombre : "")
-                    </dd>
-                </dl>
+
+@{
+    if (Model != null)
+    {
+        <div class="row">
+            <div class="col-md-10 offset-1">
+                <div class="card">
+                    <div class="card-header text-white" style="background-color: #2990CA;">
+                        Información de la  Denuncia
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Fecha)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.Fecha)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Calle)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @(!string.IsNullOrWhiteSpace(Model.Calle) ? Model.Calle + " " +Model.Numero: "")
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayName("Entre Calles")
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.EntreCalles1)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Descripcion)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.Descripcion)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayName("Tipo Denuncia")
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.TipoDenuncia.Nombre)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayName("Infractor")
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.EntreCalles2)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayName("Estado Denuncia")
+                            </dt>
+                            <dd class="col-sm-10">
+                                @(Model.EstadoDenuncia!=null ? Model.EstadoDenuncia.Nombre : "")
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="offset-10">
+                        <a asp-action="Index" class="btn btn-outline-info">Volver atrás</a>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="card-footer">
-            <div class="offset-10">
-                <a asp-action="Index" class="btn btn-outline-info">Volver atrás</a>
+    }
+    else
+    {
+        <div class="row" style="margin-top:150px">
+            <div class="col-md-8 offset-2">
+                <div class="card border-info">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <i class="fas fa-exclamation-triangle" style="color:#E77f14;font-size: 70px;margin: 20px;"></i>
+                            </div>
+                            <div class="col-md-11">
+                                <h3 style="margin: 20px;padding-left: 30px;">No se encuentra en el Sistema la denuncia con el Número ingresado</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer" style="background-color: white!important;">
+                        <div class="row offset-10">
+                            <a href="/Home" class="card-link input-sm btn btn-outline-info text-right">Ir a página Principal</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+    }
+
+}

@@ -61,15 +61,23 @@ namespace VPSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Fecha,Calle,Numero,EntreCalles1,EntreCalles2,Descripcion,TipoDenunciaId,EstadoDenunciaId,Legajo,IpDenunciante")] Denuncia denuncia)
         {
+            var nroDenuncia = 0;
+            if (_context.Denuncias.Count() > 0)
+            {
+                nroDenuncia = _context.Denuncias.Max(x=>x.Id);
+            }
+            nroDenuncia = nroDenuncia == 0 ? 1 : nroDenuncia + 1;
+            denuncia.NroDenuncia = nroDenuncia.ToString("D-00000000#");
             denuncia.Fecha = DateTime.Now;
             _context.Add(denuncia);
             await _context.SaveChangesAsync();
-            return Ok(new { success = true, message = "Denuncia generada con Éxito" });
+            return Ok(new { success = true, message = "Denuncia generada con Éxito", denunciaId = nroDenuncia });
         }
 
-        public IActionResult ThankYou()
+        public async Task<IActionResult> ThankYou(int? id)
         {
-            return View();
+            var denuncia = await _context.Denuncias.Where(x => x.Id == id).FirstOrDefaultAsync();
+            return View(denuncia);
         }
 
         // GET: Denuncias/Edit/5

@@ -1,23 +1,23 @@
-﻿
-    <div class="row" style="margin-top:150px">
-        <div class="col-md-8 offset-2">
-            <div class="card border-info">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <i class="fa fa-info-circle" style="color:#117a8b;font-size: 70px;margin: 20px;"></i>
-                        </div>
-                        <div class="col-md-10">
-                            <h3 style="margin: 30px;">Denuncia Generada Exitosamente</h3>
-                        </div>
+﻿@model VPSA.Models.Denuncia
+<div class="row" style="margin-top:150px">
+    <div class="col-md-8 offset-2">
+        <div class="card border-info">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-1">
+                        <i class="fa fa-info-circle" style="color:#117a8b;font-size: 70px;margin: 20px;"></i>
+                    </div>
+                    <div class="col-md-11">
+                        <h3 style="margin: 30px;">Su Denuncia ha sido Generada Exitosamente: <b>@Model.NroDenuncia</b></h3>
                     </div>
                 </div>
-                <div class="card-footer" style="background-color: white!important;">
-                    <div class="row offset-10">
-                        <a href="/Home" class="card-link input-sm btn btn-outline-info text-right">Ir a página Principal</a>
-                    </div>
+            </div>
+            <div class="card-footer" style="background-color: white!important;">
+                <div class="row offset-10">
+                    <a href="/Home" class="card-link input-sm btn btn-outline-info text-right">Ir a página Principal</a>
                 </div>
             </div>
         </div>
     </div>
+</div>
 

@@ -95,7 +95,7 @@
                         data: $("#denuncia-form").serialize(),
                         success: function (data) {
                             if (data.success == true) {
-                                window.location.href = "ThankYou";
+                                window.location.href = "/Denuncias/Thankyou/" + data.denunciaId;
                             }
 
                         }

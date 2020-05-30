@@ -28,9 +28,29 @@ namespace VPSA.Controllers
         }
 
         // GET: Denuncias
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
             var vPSAContext = _context.Denuncias.Include(d => d.EstadoDenuncia).Include(d => d.TipoDenuncia).OrderByDescending(o => o.Fecha);
+            //return View(await vPSAContext.ToListAsync());
+
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "fecha" : "";
+
+            switch (sortOrder)
+            {
+                case "estado":
+                    vPSAContext = vPSAContext.OrderBy(o => o.EstadoDenuncia);
+                    break;
+                case "direccion":
+                    vPSAContext = vPSAContext.OrderBy(o => o.Calle);
+                    break;
+                case "tipo_denuncia":
+                    vPSAContext = vPSAContext.OrderBy(o => o.TipoDenuncia);
+                    break;
+                default:
+                    vPSAContext = vPSAContext.OrderByDescending(o => o.Fecha);
+                    break;
+
+            }
             return View(await vPSAContext.ToListAsync());
         }
 

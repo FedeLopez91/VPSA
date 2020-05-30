@@ -18,12 +18,12 @@
                 <thead>
                     <tr class="head-grilla">
                         <th>#</th>
-                        <th>Nro Denuncia</th>
-                        <th>Fecha Creación</th>
+                        <th>#Nro</th>
+                        <th>@Html.ActionLink("FechaCreación", "Index", new { sortOrder = "" })</th>
                         <th>Dirección</th>
-                        <th>Tipo Denuncia</th>
+                        <th>@Html.ActionLink("Tipo Denuncia", "Index", new { sortOrder = "tipo_denuncia" })</th>
                         <th>Asignada a</th>
-                        <th>Estado</th>
+                        <th>@Html.ActionLink("Estado", "Index", new { sortOrder = "estado" })</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>

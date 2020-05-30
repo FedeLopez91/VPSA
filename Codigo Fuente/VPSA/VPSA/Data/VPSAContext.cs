@@ -17,5 +17,6 @@ namespace VPSA.Data
         public DbSet<Denuncia> Denuncias { get; set; }
         public DbSet<TipoDenuncia> TiposDenuncia { get; set; }
         public DbSet<EstadoDenuncia> EstadosDenuncia { get; set; }
+        public DbSet<VPSA.Models.DenunciaViewModel> DenunciaViewModel { get; set; }
     }
 }

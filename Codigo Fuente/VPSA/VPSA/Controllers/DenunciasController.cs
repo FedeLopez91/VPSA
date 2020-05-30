@@ -1,22 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using VPSA.Data;
 using VPSA.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Http;
 
 namespace VPSA.Controllers
 {
     public class DenunciasController : Controller
     {
         private readonly VPSAContext _context;
+        private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        public DenunciasController(VPSAContext context)
+        public DenunciasController(VPSAContext context, IMapper mapper, IConfiguration configuration)
         {
             _context = context;
+            _mapper = mapper;
+            _configuration = configuration;
         }
 
         // GET: Denuncias
@@ -43,8 +51,17 @@ namespace VPSA.Controllers
                 return NotFound();
             }
 
+            var PhotoUrl = _configuration.GetValue<string>("myKeys:PhotosUrl") + denuncia.NroDenuncia+".jpg";
+
+            ViewBag.Hasphoto = false;
+            if (System.IO.File.Exists(PhotoUrl))
+            {
+                ViewBag.Hasphoto = true;
+            }
+
             return View(denuncia);
         }
+
 
         // GET: Denuncias/Create
         public IActionResult Create()
@@ -59,19 +76,26 @@ namespace VPSA.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Fecha,Calle,Numero,EntreCalles1,EntreCalles2,Descripcion,TipoDenunciaId,EstadoDenunciaId,Legajo,IpDenunciante")] Denuncia denuncia)
+        public async Task<IActionResult> Create([Bind("Id,Fecha,Calle,Numero,EntreCalles1,EntreCalles2,Descripcion,TipoDenunciaId,EstadoDenunciaId,Legajo,IpDenunciante, Foto")] DenunciaViewModel denunciaViewModel)
         {
-            var nroDenuncia = 0;
-            if (_context.Denuncias.Count() > 0)
+            if (ModelState.IsValid)
             {
-                nroDenuncia = _context.Denuncias.Max(x => x.Id);
+                var denuncia = _mapper.Map<Denuncia>(denunciaViewModel);
+                var nroDenuncia = 0;
+                if (_context.Denuncias.Count() > 0)
+                {
+                    nroDenuncia = _context.Denuncias.Max(x => x.Id);
+                }
+                nroDenuncia = nroDenuncia == 0 ? 1 : nroDenuncia + 1;
+                denuncia.NroDenuncia = nroDenuncia.ToString("D-00000000#");
+                denuncia.Fecha = DateTime.Now;
+                _context.Add(denuncia);
+                await _context.SaveChangesAsync();
+                await UploadFile(denunciaViewModel.Foto, denuncia.NroDenuncia);
+
+                return RedirectToAction("ThankYou", new { id = denuncia.Id });
             }
-            nroDenuncia = nroDenuncia == 0 ? 1 : nroDenuncia + 1;
-            denuncia.NroDenuncia = nroDenuncia.ToString("D-00000000#");
-            denuncia.Fecha = DateTime.Now;
-            _context.Add(denuncia);
-            await _context.SaveChangesAsync();
-            return Ok(new { success = true, message = "Denuncia generada con Éxito", denunciaId = nroDenuncia });
+            return View(denunciaViewModel);
         }
 
         public async Task<IActionResult> ThankYou(int? id)
@@ -85,6 +109,15 @@ namespace VPSA.Controllers
         {
             var denuncia = await _context.Denuncias.Where(x => x.NroDenuncia == NroDenuncia).Include(d => d.EstadoDenuncia)
                 .Include(d => d.TipoDenuncia).FirstOrDefaultAsync();
+
+            var PhotoUrl = _configuration.GetValue<string>("myKeys:PhotosUrl") + denuncia.NroDenuncia + ".jpg";
+
+            ViewBag.Hasphoto = false;
+            if (System.IO.File.Exists(PhotoUrl))
+            {
+                ViewBag.Hasphoto = true;
+            }
+
             return View("Details", denuncia);
         }
 
@@ -177,6 +210,35 @@ namespace VPSA.Controllers
         private bool DenunciaExists(int id)
         {
             return _context.Denuncias.Any(e => e.Id == id);
+        }
+
+        private async Task<IActionResult> UploadFile(IFormFile File, string PhotoName)
+        {
+            try
+            {
+                var PhotoUrl = _configuration.GetValue<string>("myKeys:PhotosUrl");
+
+                if (!Directory.Exists(PhotoUrl))
+                {
+                    Directory.CreateDirectory(PhotoUrl);
+                }
+
+                if (File.Length > 0)
+                {
+                    string folderRoot = Path.Combine(PhotoUrl);
+                    string filePath = PhotoName + ".jpg";
+                    filePath = Path.Combine(folderRoot, filePath);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await File.CopyToAsync(stream);
+                    }
+                }
+                return Ok(new { success = true, message = "File Uploaded" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = "Error file failed to upload" });
+            }
         }
     }
 }

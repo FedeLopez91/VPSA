@@ -109,14 +109,17 @@ namespace VPSA.Controllers
         {
             var denuncia = await _context.Denuncias.Where(x => x.NroDenuncia == NroDenuncia).Include(d => d.EstadoDenuncia)
                 .Include(d => d.TipoDenuncia).FirstOrDefaultAsync();
-
-            var PhotoUrl = _configuration.GetValue<string>("myKeys:PhotosUrl") + denuncia.NroDenuncia + ".jpg";
-
-            ViewBag.Hasphoto = false;
-            if (System.IO.File.Exists(PhotoUrl))
+            if (denuncia != null)
             {
-                ViewBag.Hasphoto = true;
+                var PhotoUrl = _configuration.GetValue<string>("myKeys:PhotosUrl") + denuncia.NroDenuncia + ".jpg";
+
+                ViewBag.Hasphoto = false;
+                if (System.IO.File.Exists(PhotoUrl))
+                {
+                    ViewBag.Hasphoto = true;
+                }
             }
+
 
             return View("Details", denuncia);
         }

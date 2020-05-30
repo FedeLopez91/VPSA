@@ -13,7 +13,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@Test-CI
 
     - name: Set up .NET Core
       uses: actions/setup-dotnet@v1
@@ -24,7 +24,7 @@ jobs:
       run: dotnet build --configuration Release
 
     - name: dotnet publish
-      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/VPSA/Codigo Fuente/VPSA/VPSA
+      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}\Codigo Fuente\VPSA\VPSA.sln
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v1
@@ -32,4 +32,4 @@ jobs:
         app-name: 'vpsamvc'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_4c890523b0c7452499db5f22334710ec }}
-        package: ${{env.DOTNET_ROOT}}/VPSA/Codigo Fuente/VPSA/
+        package: ${{env.DOTNET_ROOT}}\Codigo Fuente\VPSA\VPSA.sln

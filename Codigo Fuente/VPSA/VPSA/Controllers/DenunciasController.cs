@@ -107,11 +107,12 @@ namespace VPSA.Controllers
                     nroDenuncia = _context.Denuncias.Max(x => x.Id);
                 }
                 nroDenuncia = nroDenuncia == 0 ? 1 : nroDenuncia + 1;
-                denuncia.NroDenuncia = nroDenuncia.ToString("D-00000000#");
+                denuncia.NroDenuncia = $"D-{nroDenuncia.ToString().PadLeft(8, '0')}";
                 denuncia.Fecha = DateTime.Now;
                 _context.Add(denuncia);
                 await _context.SaveChangesAsync();
-                await UploadFile(denunciaViewModel.Foto, denuncia.NroDenuncia);
+                if (denunciaViewModel.Foto != null)
+                    await UploadFile(denunciaViewModel.Foto, denuncia.NroDenuncia);
 
                 return RedirectToAction("ThankYou", new { id = denuncia.Id });
             }

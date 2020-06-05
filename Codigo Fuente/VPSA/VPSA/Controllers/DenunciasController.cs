@@ -28,30 +28,58 @@ namespace VPSA.Controllers
         }
 
         // GET: Denuncias
-        public async Task<IActionResult> Index(string sortOrder)
+        public ActionResult Index(string sortOrder)
         {
+            //Get all demands
             var vPSAContext = _context.Denuncias.Include(d => d.EstadoDenuncia).Include(d => d.TipoDenuncia).OrderByDescending(o => o.Fecha);
-            //return View(await vPSAContext.ToListAsync());
 
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "fecha" : "";
-
+            //Asks if you've been already here -> Change the sort order.
+            ViewBag.FechaSortParam = sortOrder == "date" ? "date_desc" : "date";
+            ViewBag.AddrSortParam = sortOrder == "Addr" ? "Addr_desc" : "Addr";
+            ViewBag.TypeDSortParam = sortOrder == "tipo_d" ? "tipo_d_desc" : "tipo_d";
+            ViewBag.StateSortParam = sortOrder == "state" ? "state_desc" : "state_open";
+            
             switch (sortOrder)
             {
-                case "estado":
-                    vPSAContext = vPSAContext.OrderBy(o => o.EstadoDenuncia);
-                    break;
-                case "direccion":
-                    vPSAContext = vPSAContext.OrderBy(o => o.Calle);
-                    break;
-                case "tipo_denuncia":
-                    vPSAContext = vPSAContext.OrderBy(o => o.TipoDenuncia);
-                    break;
-                default:
-                    vPSAContext = vPSAContext.OrderByDescending(o => o.Fecha);
+                //Remove closed demands
+                case "state_open":
+                vPSAContext = _context.Denuncias.Include(d => d.EstadoDenuncia).Include(d => d.TipoDenuncia).Where(d => d.Calle != "d 124").OrderByDescending(o => o.Fecha);
                     break;
 
+                //Address field
+                case "Addr_desc":
+                    vPSAContext = vPSAContext.OrderByDescending(o => o.Calle);
+                    break;
+                case "Addr":
+                    vPSAContext = vPSAContext.OrderBy(o => o.Calle);
+                    break;
+
+                //State field
+                case "state_desc":
+                    vPSAContext = vPSAContext.OrderByDescending(o => o.EstadoDenuncia);
+                    break;
+                case "state":
+                    vPSAContext = vPSAContext.OrderBy(o => o.EstadoDenuncia);
+                    break;
+
+                //Demand field
+                case "tipo_d":
+                    vPSAContext = vPSAContext.OrderBy(o => o.TipoDenuncia);
+                    break;
+                case "tipo_d_desc":
+                    vPSAContext = vPSAContext.OrderByDescending(o => o.TipoDenuncia);
+                    break;
+                
+                //Date field
+                case "date":
+                    vPSAContext = vPSAContext.OrderBy(o => o.Fecha);
+                    break;
+                case "date_desc":
+                    vPSAContext = vPSAContext.OrderByDescending(o => o.Fecha);
+                    break;
             }
-            return View(await vPSAContext.ToListAsync());
+            
+            return View(vPSAContext.ToList());
         }
 
         // GET: Denuncias/Details/5

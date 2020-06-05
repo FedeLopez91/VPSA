@@ -1,0 +1,68 @@
+﻿@model IEnumerable<VPSA.Models.Comentario>
+
+@{
+    ViewData["Title"] = "Listado de Trabajos";
+}
+
+<br />
+<div class="col-md-10 offset-1">
+    <div class="card">
+        <div class="card-header text-white" style="background-color: #2990CA;">
+            Tablero de Trabajos
+        </div>
+        <body>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="col-lg-3">
+                            @Html.DisplayNameFor(model => model.trabajo)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Denuncia)
+                        </th>
+                        <th>
+                            Nombre
+                        </th>
+                        <th>
+                            Apellido
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.trabajo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Denuncia.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Empleado.Nombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Empleado.Apellido)
+                            </td>
+
+                            <td>
+                                <a title="Editar Trabajo" asp-action="Edit" asp-route-id="@item.Id">
+                                    <i class="fa fa-edit" aria-hidden="true"></i>
+                                </a>
+                                @* <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                            </td>
+                        </tr>
+
+
+                    }
+                </tbody>
+            </table>
+                        <div class="card-footer">
+                <div class="offset-10">
+                    <a asp-controller="Denuncias"asp-action="Index" class="btn btn-outline-info">Volver al Tablero</a>
+                </div>
+            </div>
+        </body>
+
+    </div>
+</div>

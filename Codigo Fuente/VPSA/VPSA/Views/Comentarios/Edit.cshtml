@@ -1,0 +1,52 @@
+﻿@model VPSA.Models.Comentario
+
+@{
+    ViewData["Title"] = "Edit";}
+
+
+    <div class="col-md-8 offset-2 mt-2">
+        <div class="card">
+            <div class="card-header text-white" style="background-color: #2990CA;">
+                Ediar Trabajo
+            </div>
+
+            <body>
+                <hr />
+
+                <div class="card-body">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <div class="form-group">
+                            <label asp-for="trabajo" class="control-label">&nbsp;</label>
+                            <textarea asp-for="trabajo" class="form-control" rows="5" cols="12"></textarea>
+                            <span asp-validation-for="trabajo" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group" hidden>
+                            <label asp-for="DenunciaId" class="control-label"></label>
+                            <select asp-for="DenunciaId" class="form-control" asp-items="ViewBag.DenunciaId"></select>
+                            <span asp-validation-for="DenunciaId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" hidden>
+                            <label asp-for="EmpleadoId" class="control-label"></label>
+                            <select asp-for="EmpleadoId" class="form-control" asp-items="ViewBag.EmpleadoId"></select>
+                            <span asp-validation-for="EmpleadoId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <div class="offset-10">
+                        <a asp-action="Index" class="btn btn-outline-info">Volver atrás</a>
+                    </div>
+                </div>
+
+                @section Scripts {
+                    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+                }
+            </body>
+        </div>
+    </div>

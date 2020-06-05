@@ -1,0 +1,46 @@
+﻿@model VPSA.Models.Comentario
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="col-md-8 offset-2 mt-2">
+    <div class="card">
+        <div class="card-header text-white" style="background-color: #2990CA;">
+            Cargar Trabajo
+        </div>
+        <br />
+        <div class="card-body">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="trabajo" class="control-label">*Ingresar Trabajo :</label>
+                    <textarea asp-for="trabajo" placeholder="Por favor ingrese la actividad realizada en la presente denuncia" class="form-control inputRequired" rows="5" cols="12" required></textarea>
+                    <span asp-validation-for="trabajo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DenunciaId" class="control-label">Seleccione Nro de Denuncia </label>
+                    <select asp-for="DenunciaId" class="form-control" asp-items="ViewBag.DenunciaId"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EmpleadoId" class="control-label">Seleccione Empleado </label>
+                    <select asp-for="EmpleadoId" class="form-control" asp-items="ViewBag.EmpleadoId"></select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+       
+        </div>
+
+        <div class="card-footer">
+            <div class="offset-10">
+                <a asp-action="Index" class="btn btn-outline-info">Volver atrás</a>
+            </div>
+        </div>
+        </div>
+    </div>
+
+        @section Scripts {
+            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        }

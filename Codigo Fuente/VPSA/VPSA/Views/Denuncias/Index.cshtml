@@ -18,12 +18,12 @@
                 <thead>
                     <tr class="head-grilla">
                         <th>#</th>
-                        <th>#Nro</th>
-                        <th>@Html.ActionLink("FechaCreación", "Index", new { sortOrder = "" })</th>
+                        <th>Nro Denuncia</th>
+                        <th>Fecha Creación</th>
                         <th>Dirección</th>
-                        <th>@Html.ActionLink("Tipo Denuncia", "Index", new { sortOrder = "tipo_denuncia" })</th>
+                        <th>Tipo Denuncia</th>
                         <th>Asignada a</th>
-                        <th>@Html.ActionLink("Estado", "Index", new { sortOrder = "estado" })</th>
+                        <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -57,14 +57,16 @@
                                title="Ver Denuncia" asp-action="Details" asp-route-id="@item.Id">
                                 <i class="fa fa-search" aria-hidden="true"></i>
                             </a>
-                            <button class="btn btn-outline-primary btn-sm"
-                                    title="Tomar Denuncia">
+                            <a class="btn btn-outline-primary btn-sm"
+                               title="Listar Todos Los Trabajos"asp-controller="Comentarios" asp-action="Index" asp-route-id="@item.Id"   >
+                                
+
                                 <i class="fa fa-handshake" aria-hidden="true"></i>
-                            </button>
-                            <button class="btn btn-outline-primary btn-sm"
-                                    title="Cargar Trabajo">
+                            </a>
+                            <a class="btn btn-outline-primary btn-sm"
+                               title="Agregar Trabajo" asp-controller="Comentarios"asp-action="Create" asp-route-id="@item.Id">
                                 <i class="fa fa-cogs" aria-hidden="true"></i>
-                            </button>
+                            </a>
                             <button class="btn btn-outline-primary btn-sm dropdown-toggle"
                                     type="button"
                                     id="dropdownMenuButton"
@@ -89,8 +91,8 @@
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </button>
                             @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
                         </td>
                     </tr>
                     }

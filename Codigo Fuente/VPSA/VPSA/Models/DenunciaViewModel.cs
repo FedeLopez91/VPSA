@@ -12,9 +12,7 @@ namespace VPSA.Models
     {
         public int Id { get; set; }
         public DateTime? Fecha { get; set; }
-        [Required(ErrorMessage = "*Calle es Obligatorio")]
         public string Calle { get; set; }
-        [Required(ErrorMessage = "*Numero es Obligatorio")]
         public int? Numero { get; set; }
         public string EntreCalles1 { get; set; }
         public string EntreCalles2 { get; set; }

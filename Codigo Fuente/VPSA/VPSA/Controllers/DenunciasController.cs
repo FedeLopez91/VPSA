@@ -28,31 +28,14 @@ namespace VPSA.Controllers
         }
 
         // GET: Denuncias
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index()
         {
             var vPSAContext = _context.Denuncias.Include(d => d.EstadoDenuncia).Include(d => d.TipoDenuncia).OrderByDescending(o => o.Fecha);
-            //return View(await vPSAContext.ToListAsync());
-
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "fecha" : "";
-
-            switch (sortOrder)
-            {
-                case "estado":
-                    vPSAContext = vPSAContext.OrderBy(o => o.EstadoDenuncia);
-                    break;
-                case "direccion":
-                    vPSAContext = vPSAContext.OrderBy(o => o.Calle);
-                    break;
-                case "tipo_denuncia":
-                    vPSAContext = vPSAContext.OrderBy(o => o.TipoDenuncia);
-                    break;
-                default:
-                    vPSAContext = vPSAContext.OrderByDescending(o => o.Fecha);
-                    break;
-
-            }
             return View(await vPSAContext.ToListAsync());
         }
+
+
+
 
         // GET: Denuncias/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -107,12 +90,11 @@ namespace VPSA.Controllers
                     nroDenuncia = _context.Denuncias.Max(x => x.Id);
                 }
                 nroDenuncia = nroDenuncia == 0 ? 1 : nroDenuncia + 1;
-                denuncia.NroDenuncia = $"D-{nroDenuncia.ToString().PadLeft(8, '0')}";
+                denuncia.NroDenuncia = nroDenuncia.ToString("D-00000000#");
                 denuncia.Fecha = DateTime.Now;
                 _context.Add(denuncia);
                 await _context.SaveChangesAsync();
-                if (denunciaViewModel.Foto != null)
-                    await UploadFile(denunciaViewModel.Foto, denuncia.NroDenuncia);
+                await UploadFile(denunciaViewModel.Foto, denuncia.NroDenuncia);
 
                 return RedirectToAction("ThankYou", new { id = denuncia.Id });
             }
@@ -130,17 +112,14 @@ namespace VPSA.Controllers
         {
             var denuncia = await _context.Denuncias.Where(x => x.NroDenuncia == NroDenuncia).Include(d => d.EstadoDenuncia)
                 .Include(d => d.TipoDenuncia).FirstOrDefaultAsync();
-            if (denuncia != null)
+
+            var PhotoUrl = _configuration.GetValue<string>("myKeys:PhotosUrl") + denuncia.NroDenuncia + ".jpg";
+
+            ViewBag.Hasphoto = false;
+            if (System.IO.File.Exists(PhotoUrl))
             {
-                var PhotoUrl = _configuration.GetValue<string>("myKeys:PhotosUrl") + denuncia.NroDenuncia + ".jpg";
-
-                ViewBag.Hasphoto = false;
-                if (System.IO.File.Exists(PhotoUrl))
-                {
-                    ViewBag.Hasphoto = true;
-                }
+                ViewBag.Hasphoto = true;
             }
-
 
             return View("Details", denuncia);
         }

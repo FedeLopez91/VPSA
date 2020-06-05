@@ -138,6 +138,7 @@ namespace VPSA.Controllers
                 nroDenuncia = nroDenuncia == 0 ? 1 : nroDenuncia + 1;
                 denuncia.NroDenuncia = $"D-{nroDenuncia.ToString().PadLeft(8, '0')}";
                 denuncia.Fecha = DateTime.Now;
+                denuncia.EstadoDenunciaId = 1;
                 _context.Add(denuncia);
                 await _context.SaveChangesAsync();
                 if (denunciaViewModel.Foto != null)

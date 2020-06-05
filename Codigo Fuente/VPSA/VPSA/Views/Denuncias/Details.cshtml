@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Ver Denuncia";
+    var comentarios = (List<VPSA.Models.Comentario>)ViewData["Comentarios"];
 }
 <br />
 
@@ -73,7 +74,7 @@
                                 <div class="card">
                                     <div class="card-header">Evidencia</div>
                                     <div class="card-body">
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-12" style="text-align:center">
                                             @if (hasPhoto)
                                             {
                                                 <img src="~/Photos/@(Model.NroDenuncia).jpg" class="img-fluid" style="max-width: 500px;">
@@ -85,6 +86,72 @@
 
                                         </div>
 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">Historial Trabajo</div>
+                                    <div class="card-body">
+                                        <div class="col-sm-12">
+                                            @{
+
+                                                if (comentarios.Any())
+                                                {
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>
+                                                                    @Html.DisplayName("Fecha Trabajo")
+                                                                </th>
+                                                                <th>
+                                                                    @Html.DisplayName("Empleado Asignado")
+                                                                </th>
+                                                                <th>
+                                                                    @Html.DisplayName("Trabajo Realizado")
+                                                                </th>
+                                                                <th>
+                                                                    @Html.DisplayName("Estado")
+                                                                </th>
+                                                                @*<th></th>*@
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var item in comentarios.OrderByDescending(x => x.FechaCreacion).ToList())
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.FechaCreacion.ToString("dd/MM/yyyy HH:mm")
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.Empleado.NombreCompleto
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.Descripcion
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.EstadoDenuncia.Nombre
+                                                                    </td>
+                                                                    @*<td>
+                                                                        <a asp-action="Edit" asp-controller="Comentarios" asp-route-id="@item.Id">Edit</a> |
+                                                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                                                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                                                    </td>*@
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                }
+                                                else
+                                                {
+                                                    <p>No se han cargado trabajos</p>
+                                                }
+                                            }
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>

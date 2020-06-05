@@ -30,69 +30,70 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Id)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NroDenuncia)
-                        </td>
-                        <td>
-                            @(item.Fecha.HasValue ? item.Fecha.Value.ToString("dd/MM/yyyy HH:mm"): "")
-                        </td>
-                        <td>
-                            @(!string.IsNullOrEmpty(item.Calle) ? item.Calle +" " + item.Numero : "")
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.TipoDenuncia.Nombre)
-                        </td>
-                        <td>
-                            Sin Asignar
-                        </td>
-                        <td>
-                            @(item.EstadoDenuncia!= null ? item.EstadoDenuncia.Nombre: "Registrada")
-                        </td>
-                        <td>
-                            <a class="btn btn-outline-primary btn-sm"
-                               title="Ver Denuncia" asp-action="Details" asp-route-id="@item.Id">
-                                <i class="fa fa-search" aria-hidden="true"></i>
-                            </a>
-                            <button class="btn btn-outline-primary btn-sm"
-                                    title="Tomar Denuncia">
-                                <i class="fa fa-handshake" aria-hidden="true"></i>
-                            </button>
-                            <button class="btn btn-outline-primary btn-sm"
-                                    title="Cargar Trabajo">
-                                <i class="fa fa-cogs" aria-hidden="true"></i>
-                            </button>
-                            <button class="btn btn-outline-primary btn-sm dropdown-toggle"
-                                    type="button"
-                                    id="dropdownMenuButton"
-                                    data-toggle="dropdown"
-                                    title="Derivar a:"
-                                    aria-haspopup="true"
-                                    aria-expanded="false">
-                                <i class="fa fa-users" aria-hidden="true"></i>
-                            </button>
-                            <div class="dropdown-menu"
-                                 aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Paola Juncos</a>
-                                <a class="dropdown-item" href="#">Julian Bozas</a>
-                                <a class="dropdown-item" href="#">Federico Lopez</a>
-                                <a class="dropdown-item" href="#">Roman Sadowski</a>
-                            </div>
-                            <button class="my-0 btn btn-outline-danger btn-sm"
-                                    color="secondary"
-                                    title="Quitar de la Lista"
-                                    rounded="true"
-                                    (click)="remove(id)">
-                                <i class="fa fa-trash" aria-hidden="true"></i>
-                            </button>
-                            @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NroDenuncia)
+                            </td>
+                            <td>
+                                @(item.Fecha.HasValue ? item.Fecha.Value.ToString("dd/MM/yyyy HH:mm"): "")
+                            </td>
+                            <td>
+                                @(!string.IsNullOrEmpty(item.Calle) ? item.Calle +" " + item.Numero : "")
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TipoDenuncia.Nombre)
+                            </td>
+                            <td>
+                                Sin Asignar
+                            </td>
+                            <td>
+                                @(item.EstadoDenuncia!= null ? item.EstadoDenuncia.Nombre: "Registrada")
+                            </td>
+                            <td>
+                                <a class="btn btn-outline-primary btn-sm"
+                                   title="Ver Denuncia" asp-action="Details" asp-route-id="@item.Id">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </a>
+                                <a class="btn btn-outline-primary btn-sm"
+                                   title="Tomar Denuncia">
+                                    <i class="fa fa-handshake" aria-hidden="true"></i>
+                                </a>
+                                <a class="btn btn-outline-primary btn-sm"
+                                   title="Cargar Trabajo"
+                                   asp-controller="Comentarios" asp-action="Create" asp-route-id="@item.Id">
+                                    <i class="fa fa-cogs" aria-hidden="true"></i>
+                                </a>
+                                <button class="btn btn-outline-primary btn-sm dropdown-toggle"
+                                        type="button"
+                                        id="dropdownMenuButton"
+                                        data-toggle="dropdown"
+                                        title="Derivar a:"
+                                        aria-haspopup="true"
+                                        aria-expanded="false">
+                                    <i class="fa fa-users" aria-hidden="true"></i>
+                                </button>
+                                <div class="dropdown-menu"
+                                     aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Paola Juncos</a>
+                                    <a class="dropdown-item" href="#">Julian Bozas</a>
+                                    <a class="dropdown-item" href="#">Federico Lopez</a>
+                                    <a class="dropdown-item" href="#">Roman Sadowski</a>
+                                </div>
+                                <button class="my-0 btn btn-outline-danger btn-sm"
+                                        color="secondary"
+                                        title="Quitar de la Lista"
+                                        rounded="true"
+                                        (click)="remove(id)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                                @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>

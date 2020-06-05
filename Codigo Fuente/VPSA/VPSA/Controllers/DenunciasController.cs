@@ -100,7 +100,8 @@ namespace VPSA.Controllers
             }
 
             var PhotoUrl = _configuration.GetValue<string>("myKeys:PhotosUrl") + denuncia.NroDenuncia+".jpg";
-
+            ViewData["Comentarios"] = await _context.Comentarios.Where(x => x.DenunciaId == denuncia.Id)
+                .Include(d => d.EstadoDenuncia).Include(d=>d.Empleado).ToListAsync();
             ViewBag.Hasphoto = false;
             if (System.IO.File.Exists(PhotoUrl))
             {
@@ -158,8 +159,11 @@ namespace VPSA.Controllers
         {
             var denuncia = await _context.Denuncias.Where(x => x.NroDenuncia == NroDenuncia).Include(d => d.EstadoDenuncia)
                 .Include(d => d.TipoDenuncia).FirstOrDefaultAsync();
+            
             if (denuncia != null)
             {
+                ViewData["Comentarios"] = await _context.Comentarios.Where(x => x.DenunciaId == denuncia.Id)
+                   .Include(d => d.EstadoDenuncia).Include(d => d.Empleado).ToListAsync();
                 var PhotoUrl = _configuration.GetValue<string>("myKeys:PhotosUrl") + denuncia.NroDenuncia + ".jpg";
 
                 ViewBag.Hasphoto = false;

@@ -23,5 +23,7 @@ namespace VPSA.Models
         public string Legajo { get; set; }
         public string IpDenunciante { get; set; }
         public string NroDenuncia { get; set; }
+
+        public virtual List<Comentario> Comentarios { get; set; }
     }
 }

@@ -16,6 +16,39 @@ namespace VPSA.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.4");
 
+            modelBuilder.Entity("VPSA.Models.Comentario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DenunciaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("EmpleadoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EstadoDenunciaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DenunciaId");
+
+                    b.HasIndex("EmpleadoId");
+
+                    b.HasIndex("EstadoDenunciaId");
+
+                    b.ToTable("Comentarios");
+                });
+
             modelBuilder.Entity("VPSA.Models.Denuncia", b =>
                 {
                     b.Property<int>("Id")
@@ -64,6 +97,26 @@ namespace VPSA.Migrations
                     b.ToTable("Denuncias");
                 });
 
+            modelBuilder.Entity("VPSA.Models.Empleado", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Apellido")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Dni")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Empleados");
+                });
+
             modelBuilder.Entity("VPSA.Models.EstadoDenuncia", b =>
                 {
                     b.Property<int>("Id")
@@ -90,6 +143,27 @@ namespace VPSA.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TiposDenuncia");
+                });
+
+            modelBuilder.Entity("VPSA.Models.Comentario", b =>
+                {
+                    b.HasOne("VPSA.Models.Denuncia", "Denuncia")
+                        .WithMany("Comentarios")
+                        .HasForeignKey("DenunciaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VPSA.Models.Empleado", "Empleado")
+                        .WithMany()
+                        .HasForeignKey("EmpleadoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VPSA.Models.EstadoDenuncia", "EstadoDenuncia")
+                        .WithMany()
+                        .HasForeignKey("EstadoDenunciaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("VPSA.Models.Denuncia", b =>

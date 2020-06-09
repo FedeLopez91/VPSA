@@ -35,25 +35,12 @@ namespace VPSA.Controllers
 
             //Asks if you've been already here -> Change the sort order.
             ViewBag.FechaSortParam = sortOrder == "date" ? "date_desc" : "date";
-            ViewBag.AddrSortParam = sortOrder == "Addr" ? "Addr_desc" : "Addr";
             ViewBag.TypeDSortParam = sortOrder == "tipo_d" ? "tipo_d_desc" : "tipo_d";
-            ViewBag.StateSortParam = sortOrder == "state" ? "state_desc" : "state_open";
+            ViewBag.EstadoSortParam = sortOrder == "state" ? "state_desc" : "state";
             
             switch (sortOrder)
             {
-                //Remove closed demands
-                case "state_open":
-                vPSAContext = _context.Denuncias.Include(d => d.EstadoDenuncia).Include(d => d.TipoDenuncia).Where(d => d.Calle != "d 124").OrderByDescending(o => o.Fecha);
-                    break;
-
-                //Address field
-                case "Addr_desc":
-                    vPSAContext = vPSAContext.OrderByDescending(o => o.Calle);
-                    break;
-                case "Addr":
-                    vPSAContext = vPSAContext.OrderBy(o => o.Calle);
-                    break;
-
+                
                 //State field
                 case "state_desc":
                     vPSAContext = vPSAContext.OrderByDescending(o => o.EstadoDenuncia);

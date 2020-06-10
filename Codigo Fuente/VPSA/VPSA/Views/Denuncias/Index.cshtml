@@ -17,12 +17,13 @@
             <table class="table table-bordered table-striped text-center">
                 <thead>
                     <tr class="head-grilla">
+                        <th>#</th>
                         <th>#Nro</th>
-                        <th>Fecha Creación</th>
+                        <th>@Html.ActionLink("Fecha", "Index", new { sortOrder = ViewBag.FechaSortParam })</th>
                         <th>Dirección</th>
-                        <th>Tipo Denuncia</th>
-                        <th>Asignada a</th>
-                        <th>Estado</th>
+                        <th>@Html.ActionLink("Tipo denuncia", "Index", new { sortOrder = ViewBag.TypeDSortParam })</th>
+                        @*<th>Asignada a</th>*@
+                        <th>@Html.ActionLink("Estado", "Index", new { sortOrder = ViewBag.EstadoSortParam })</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -34,6 +35,9 @@
                                 @Html.DisplayFor(modelItem => item.Id)
                             </td>
                             <td>
+                                @Html.DisplayFor(modelItem => item.NroDenuncia)
+                            </td>
+                            <td>
                                 @(item.Fecha.HasValue ? item.Fecha.Value.ToString("dd/MM/yyyy HH:mm"): "")
                             </td>
                             <td>
@@ -42,9 +46,9 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.TipoDenuncia.Nombre)
                             </td>
-                            <td>
+                            @*<td>
                                 Sin Asignar
-                            </td>
+                            </td>*@
                             <td>
                                 @(item.EstadoDenuncia!= null ? item.EstadoDenuncia.Nombre: "Registrada")
                             </td>
@@ -53,14 +57,15 @@
                                    title="Ver Denuncia" asp-action="Details" asp-route-id="@item.Id">
                                     <i class="fa fa-search" aria-hidden="true"></i>
                                 </a>
-                                <button class="btn btn-outline-primary btn-sm"
-                                        title="Tomar Denuncia">
-                                    <i class="fa fa-handshake" aria-hidden="true"></i>
-                                </button>
-                                <button class="btn btn-outline-primary btn-sm"
-                                        title="Cargar Trabajo">
+                                <a class="btn btn-outline-primary btn-sm"
+                                   title="Tomar Denuncia">
+                                    <i class="fa fa-handshake" style="color:blue" aria-hidden="true"></i>
+                                </a>
+                                <a class="btn btn-outline-primary btn-sm"
+                                   title="Cargar Trabajo"
+                                   asp-controller="Comentarios" asp-action="Create" asp-route-id="@item.Id">
                                     <i class="fa fa-cogs" aria-hidden="true"></i>
-                                </button>
+                                </a>
                                 <button class="btn btn-outline-primary btn-sm dropdown-toggle"
                                         type="button"
                                         id="dropdownMenuButton"

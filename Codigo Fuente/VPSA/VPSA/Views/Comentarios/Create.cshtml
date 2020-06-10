@@ -1,0 +1,69 @@
+﻿@model VPSA.Models.Comentario
+
+@{
+    ViewData["Title"] = "Create";
+    var denuncia = (Denuncia)ViewData["Denuncia"];
+}
+
+<div class="col-md-8 offset-2 mt-2">
+    <div class="card">
+        <div class="card-header text-white" style="background-color: #2990CA;">
+            Cargar Trabajo - <b>@denuncia.NroDenuncia</b>
+        </div>
+        <br />
+        <div class="card-body">
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <b>Fecha Carga: </b>@(denuncia.Fecha.HasValue ? denuncia.Fecha.Value.ToString("dd/MM/yyyy HH:mm"): "")
+                </div>
+                <div class="col-md-4">
+                    <b>Calle: </b>@(!string.IsNullOrWhiteSpace(denuncia.Calle) ? denuncia.Calle + " " + denuncia.Numero: "")
+                </div>
+                <div class="col-md-4">
+                    <b>Tipo Denuncia: </b>@denuncia.TipoDenuncia.Nombre
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <b>Descripción: </b> @denuncia.Descripcion
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-md-8 offset-2">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" name="DenunciaId" value="@denuncia.Id" />
+                        <div class="form-group">
+                            <label class="control-label">Trabajo*</label>
+                            <textarea asp-for="Descripcion" class="form-control" rows="5" cols="12"></textarea>
+                            <span asp-validation-for="Descripcion" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Empleado*</label>
+                            <select asp-for="EmpleadoId" class="form-control" asp-items="ViewBag.EmpleadoId">
+                                <option></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Estado*</label>
+                            <select asp-for="EstadoDenunciaId" class="form-control" asp-items="ViewBag.EstadoId">
+                                <option></option>
+                            </select>
+                            <span asp-validation-for="EstadoDenunciaId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group text-right">
+                            <input type="submit" value="Crear Trabajo" class="btn btn-info" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

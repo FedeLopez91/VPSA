@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using VPSA.Data;
-using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
+using AutoMapper;
 
 namespace VPSA
 {
@@ -29,6 +29,7 @@ namespace VPSA
                     options.UseSqlite(Configuration.GetConnectionString("VPSAContext")));
             
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

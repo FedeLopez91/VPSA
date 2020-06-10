@@ -1,0 +1,88 @@
+﻿@model VPSA.Models.DenunciaViewModel
+
+@{
+    ViewData["Title"] = "Test";
+}
+
+<h1>Test</h1>
+
+<h4>DenunciaViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Fecha" class="control-label"></label>
+                <input asp-for="Fecha" class="form-control" />
+                <span asp-validation-for="Fecha" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Calle" class="control-label"></label>
+                <input asp-for="Calle" class="form-control" />
+                <span asp-validation-for="Calle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Numero" class="control-label"></label>
+                <input asp-for="Numero" class="form-control" />
+                <span asp-validation-for="Numero" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EntreCalles1" class="control-label"></label>
+                <input asp-for="EntreCalles1" class="form-control" />
+                <span asp-validation-for="EntreCalles1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EntreCalles2" class="control-label"></label>
+                <input asp-for="EntreCalles2" class="form-control" />
+                <span asp-validation-for="EntreCalles2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Descripcion" class="control-label"></label>
+                <input asp-for="Descripcion" class="form-control" />
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TipoDenunciaId" class="control-label"></label>
+                <select asp-for="TipoDenunciaId" class="form-control" asp-items="ViewBag.TipoDenunciaId">
+                    <option value=""></option>
+                </select>
+                <span asp-validation-for="TipoDenunciaId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EstadoDenunciaId" class="control-label"></label>
+                <select asp-for="EstadoDenunciaId" class="form-control" asp-items="ViewBag.EstadoDenunciaId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Legajo" class="control-label"></label>
+                <input asp-for="Legajo" class="form-control" />
+                <span asp-validation-for="Legajo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IpDenunciante" class="control-label"></label>
+                <input asp-for="IpDenunciante" class="form-control" />
+                <span asp-validation-for="IpDenunciante" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NroDenuncia" class="control-label"></label>
+                <input asp-for="NroDenuncia" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Foto" class="control-label"></label>
+                <input asp-for="Foto" accept="image/*" />
+                <span asp-validation-for="Foto" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

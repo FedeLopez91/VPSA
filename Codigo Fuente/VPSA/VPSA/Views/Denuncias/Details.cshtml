@@ -2,65 +2,193 @@
 
 @{
     ViewData["Title"] = "Ver Denuncia";
+    var comentarios = (List<VPSA.Models.Comentario>)ViewData["Comentarios"];
 }
 <br />
-<div class="row">
-    <div class="col-md-10 offset-1">
-        <div class="card">
-            <div class="card-header text-white" style="background-color: #2990CA;">
-                Información de la  Denuncia
-            </div>
-            <div class="card-body">
-                <dl class="row">
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Fecha)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.Fecha)
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Calle)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @(!string.IsNullOrWhiteSpace(Model.Calle) ? Model.Calle + " " +Model.Numero: "")
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayName("Entre Calles")
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.EntreCalles1)
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.Descripcion)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.Descripcion)
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.TipoDenuncia)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.TipoDenuncia.Nombre)
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayName("Infractor")
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.EntreCalles2)
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayName("Estado Denuncia")
-                    </dt>
-                    <dd class="col-sm-10">
-                        @(Model.EstadoDenuncia!=null ? Model.EstadoDenuncia.Nombre : "")
-                    </dd>
-                </dl>
+
+@{
+    var hasPhoto = Convert.ToBoolean(ViewBag.Hasphoto);
+
+    if (Model != null)
+    {
+        <div class="row">
+            <div class="col-md-10 offset-1">
+                <div class="card">
+                    <div class="card-header text-white" style="background-color: #2990CA;">
+                        Información de la  Denuncia - <b>@Model.NroDenuncia</b>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">Datos Generales</div>
+                                    <div class="col-sm-12">
+                                        <dl class="row">
+                                            <dt class="col-sm-4">
+                                                @Html.DisplayNameFor(model => model.Fecha)
+                                            </dt>
+                                            <dd class="col-sm-8">
+                                                @(Model.Fecha.HasValue ? Model.Fecha.Value.ToString("dd/MM/yyyy HH:mm"): "")
+                                            </dd>
+                                            <dt class="col-sm-4">
+                                                @Html.DisplayNameFor(model => model.Calle)
+                                            </dt>
+                                            <dd class="col-sm-8">
+                                                @(!string.IsNullOrWhiteSpace(Model.Calle) ? Model.Calle + " " +Model.Numero: "")
+                                            </dd>
+                                            <dt class="col-sm-4">
+                                                @Html.DisplayName("Entre Calles")
+                                            </dt>
+                                            <dd class="col-sm-8">
+                                                @Html.DisplayFor(model => model.EntreCalles1)
+                                            </dd>
+                                            <dt class="col-sm-4">
+                                                @Html.DisplayName("Descripción")
+                                            </dt>
+                                            <dd class="col-sm-8">
+                                                @Html.DisplayFor(model => model.Descripcion)
+                                            </dd>
+                                            <dt class="col-sm-4">
+                                                @Html.DisplayName("Tipo Denuncia")
+                                            </dt>
+                                            <dd class="col-sm-8">
+                                                @Html.DisplayFor(model => model.TipoDenuncia.Nombre)
+                                            </dd>
+                                            <dt class="col-sm-4">
+                                                @Html.DisplayName("Infractor")
+                                            </dt>
+                                            <dd class="col-sm-8">
+                                                @Html.DisplayFor(model => model.EntreCalles2)
+                                            </dd>
+                                            <dt class="col-sm-4">
+                                                @Html.DisplayName("Estado Denuncia")
+                                            </dt>
+                                            <dd class="col-sm-8">
+                                                @(Model.EstadoDenuncia!=null ? Model.EstadoDenuncia.Nombre : "")
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">Evidencia</div>
+                                    <div class="card-body">
+                                        <div class="col-sm-12" style="text-align:center">
+                                            @if (hasPhoto)
+                                            {
+                                                <img src="~/Photos/@(Model.NroDenuncia).jpg" class="img-fluid" style="max-width: 500px;">
+                                            }
+                                            else
+                                            {
+                                                <p>No hay evidencia cargada</p>
+                                            }
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">Historial Trabajo</div>
+                                    <div class="card-body">
+                                        <div class="col-sm-12">
+                                            @{
+
+                                                if (comentarios.Any())
+                                                {
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>
+                                                                    @Html.DisplayName("Fecha Trabajo")
+                                                                </th>
+                                                                <th>
+                                                                    @Html.DisplayName("Empleado Asignado")
+                                                                </th>
+                                                                <th>
+                                                                    @Html.DisplayName("Trabajo Realizado")
+                                                                </th>
+                                                                <th>
+                                                                    @Html.DisplayName("Estado")
+                                                                </th>
+                                                                @*<th></th>*@
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var item in comentarios.OrderByDescending(x => x.FechaCreacion).ToList())
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.FechaCreacion.ToString("dd/MM/yyyy HH:mm")
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.Empleado.NombreCompleto
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.Descripcion
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.EstadoDenuncia.Nombre
+                                                                    </td>
+                                                                    @*<td>
+                                                                        <a asp-action="Edit" asp-controller="Comentarios" asp-route-id="@item.Id">Edit</a> |
+                                                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                                                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                                                    </td>*@
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                }
+                                                else
+                                                {
+                                                    <p>No se han cargado trabajos</p>
+                                                }
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="offset-10">
+                            <a asp-action="Index" class="btn btn-outline-info">Volver atrás</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="card-footer">
-            <div class="offset-10">
-                <a asp-action="Index" class="btn btn-outline-info">Volver atrás</a>
+    }
+    else
+    {
+        <div class="row" style="margin-top:150px">
+            <div class="col-md-8 offset-2">
+                <div class="card border-info">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <i class="fas fa-exclamation-triangle" style="color:#E77f14;font-size: 70px;margin: 20px;"></i>
+                            </div>
+                            <div class="col-md-11">
+                                <h3 style="margin: 20px;padding-left: 30px;">No se encuentra en el sistema la denuncia con el Número ingresado</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer" style="background-color: white!important;">
+                        <div class="row offset-10">
+                            <a href="/Home" class="card-link input-sm btn btn-outline-info text-right">Ir a página Principal</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+    }
+
+}

@@ -27,6 +27,56 @@ namespace VPSA.Controllers
             _configuration = configuration;
         }
 
+        public IActionResult LoadData()
+        {
+            try
+            {
+                var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
+                // Skiping number of Rows count  
+                var start = Request.Form["start"].FirstOrDefault();
+                // Paging Length 10,20  
+                var length = Request.Form["length"].FirstOrDefault();
+                // Sort Column Name  
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                // Sort Column Direction ( asc ,desc)  
+                var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
+                // Search Value from (Search box)  
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+
+                //Paging Size (10,20,50,100)  
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+                int recordsTotal = 0;
+
+                // Getting all Customer data  
+                var customerData = _context.Denuncias.ToList();
+
+                //Sorting  
+                //if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
+                //{
+                //    customerData = customerData.OrderBy(sortColumn + " " + sortColumnDirection);
+                //}
+                ////Search  
+                //if (!string.IsNullOrEmpty(searchValue))
+                //{
+                //    customerData = customerData.Where(m => m.Descripcion == searchValue);
+                //}
+
+                //total number of rows count   
+                recordsTotal = customerData.Count();
+                //Paging   
+                var data = customerData.Skip(skip).Take(pageSize).ToList();
+                //Returning Json Data  
+                return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
         // GET: Denuncias
         public ActionResult Index(string sortOrder)
         {
@@ -34,38 +84,38 @@ namespace VPSA.Controllers
             var vPSAContext = _context.Denuncias.Include(d => d.EstadoDenuncia).Include(d => d.TipoDenuncia).OrderByDescending(o => o.Fecha);
 
             //Asks if you've been already here -> Change the sort order.
-            ViewBag.FechaSortParam = sortOrder == "date" ? "date_desc" : "date";
-            ViewBag.TypeDSortParam = sortOrder == "tipo_d" ? "tipo_d_desc" : "tipo_d";
-            ViewBag.EstadoSortParam = sortOrder == "state" ? "state_desc" : "state";
-            
-            switch (sortOrder)
-            {
-                
-                //State field
-                case "state_desc":
-                    vPSAContext = vPSAContext.OrderByDescending(o => o.EstadoDenuncia);
-                    break;
-                case "state":
-                    vPSAContext = vPSAContext.OrderBy(o => o.EstadoDenuncia);
-                    break;
+            //ViewBag.FechaSortParam = sortOrder == "date" ? "date_desc" : "date";
+            //ViewBag.TypeDSortParam = sortOrder == "tipo_d" ? "tipo_d_desc" : "tipo_d";
+            //ViewBag.EstadoSortParam = sortOrder == "state" ? "state_desc" : "state";
 
-                //Demand field
-                case "tipo_d":
-                    vPSAContext = vPSAContext.OrderBy(o => o.TipoDenuncia);
-                    break;
-                case "tipo_d_desc":
-                    vPSAContext = vPSAContext.OrderByDescending(o => o.TipoDenuncia);
-                    break;
-                
-                //Date field
-                case "date":
-                    vPSAContext = vPSAContext.OrderBy(o => o.Fecha);
-                    break;
-                case "date_desc":
-                    vPSAContext = vPSAContext.OrderByDescending(o => o.Fecha);
-                    break;
-            }
-            
+            //switch (sortOrder)
+            //{
+
+            //    //State field
+            //    case "state_desc":
+            //        vPSAContext = vPSAContext.OrderByDescending(o => o.EstadoDenuncia.Nombre);
+            //        break;
+            //    case "state":
+            //        vPSAContext = vPSAContext.OrderBy(o => o.EstadoDenuncia.Nombre);
+            //        break;
+
+            //    //Demand field
+            //    case "tipo_d":
+            //        vPSAContext = vPSAContext.OrderBy(o => o.TipoDenuncia.Nombre);
+            //        break;
+            //    case "tipo_d_desc":
+            //        vPSAContext = vPSAContext.OrderByDescending(o => o.TipoDenuncia.Nombre);
+            //        break;
+
+            //    //Date field
+            //    case "date":
+            //        vPSAContext = vPSAContext.OrderBy(o => o.Fecha);
+            //        break;
+            //    case "date_desc":
+            //        vPSAContext = vPSAContext.OrderByDescending(o => o.Fecha);
+            //        break;
+            //}
+
             return View(vPSAContext.ToList());
         }
 
@@ -86,9 +136,9 @@ namespace VPSA.Controllers
                 return NotFound();
             }
 
-            var PhotoUrl = _configuration.GetValue<string>("myKeys:PhotosUrl") + denuncia.NroDenuncia+".jpg";
+            var PhotoUrl = _configuration.GetValue<string>("myKeys:PhotosUrl") + denuncia.NroDenuncia + ".jpg";
             ViewData["Comentarios"] = await _context.Comentarios.Where(x => x.DenunciaId == denuncia.Id)
-                .Include(d => d.EstadoDenuncia).Include(d=>d.Empleado).ToListAsync();
+                .Include(d => d.EstadoDenuncia).Include(d => d.Empleado).ToListAsync();
             ViewBag.Hasphoto = false;
             if (System.IO.File.Exists(PhotoUrl))
             {
@@ -147,7 +197,7 @@ namespace VPSA.Controllers
         {
             var denuncia = await _context.Denuncias.Where(x => x.NroDenuncia == NroDenuncia).Include(d => d.EstadoDenuncia)
                 .Include(d => d.TipoDenuncia).FirstOrDefaultAsync();
-            
+
             if (denuncia != null)
             {
                 ViewData["Comentarios"] = await _context.Comentarios.Where(x => x.DenunciaId == denuncia.Id)

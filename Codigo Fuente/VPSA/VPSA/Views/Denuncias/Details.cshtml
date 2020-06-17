@@ -5,7 +5,7 @@
     var comentarios = (List<VPSA.Models.Comentario>)ViewData["Comentarios"];
 }
 <br />
-
+<link href="~/lib/Datatables/datatables.min.css" rel="stylesheet" />
 @{
     var hasPhoto = Convert.ToBoolean(ViewBag.Hasphoto);
 
@@ -94,14 +94,21 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
-                                    <div class="card-header">Historial Trabajo</div>
+                                    <div class="card-header">
+                                        <div class="col-md-12">
+                                            Historial Trabajo
+                                            <button type="button" class="btn btn-info btn-sm float-right" data-toggle="modal" data-target="#modal-lg">
+                                                Cargar Nuevo
+                                            </button>
+                                        </div>
+                                    </div>
                                     <div class="card-body">
                                         <div class="col-sm-12">
                                             @{
 
                                                 if (comentarios.Any())
                                                 {
-                                                    <table class="table">
+                                                    <table class="table" id="Comentarios">
                                                         <thead>
                                                             <tr>
                                                                 <th>
@@ -136,10 +143,10 @@
                                                                         @item.EstadoDenuncia.Nombre
                                                                     </td>
                                                                     @*<td>
-                                                                        <a asp-action="Edit" asp-controller="Comentarios" asp-route-id="@item.Id">Edit</a> |
-                                                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                                                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                                                                    </td>*@
+                                                                            <a asp-action="Edit" asp-controller="Comentarios" asp-route-id="@item.Id">Edit</a> |
+                                                                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                                                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                                                        </td>*@
                                                                 </tr>
                                                             }
                                                         </tbody>
@@ -191,4 +198,50 @@
         </div>
     }
 
+}
+<partial name="../Comentarios/_CreateModal" />
+
+@section Scripts {
+    <script src="~/lib/Datatables/datatables.min.js"></script>
+    <script src="~/js/SaveComentarios.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#Comentarios").DataTable({
+                "columnDefs": [{
+                    "targets": [0, 1, 2, 3],
+                    "visible": true,
+                    //"searchable": false,
+                    "orderable": false
+                }],
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    },
+                    "buttons": {
+                        "copy": "Copiar",
+                        "colvis": "Visibilidad"
+                    }
+                }
+            });
+        });
+    </script>
 }

@@ -1,0 +1,40 @@
+﻿<div class="modal fade show" id="modal-lg" aria-modal="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#2990CA">
+                <h4 class="modal-title text-light">Agregar Nuevo Comentario</h4>
+                <input type="hidden" id="NameView" data-NombreView=" @Url.Action("Create", @ViewData["NombreController"])" />
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="DenunciaId"/>
+                <div class="form-group">
+                    <label class="control-label">Trabajo*</label>
+                    <textarea name="Descripcion" class="form-control" rows="5" cols="12"></textarea>
+                    <span id="DescripcionValid" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Empleado*</label>
+                    <select name="EmpleadoId" class="form-control" asp-items="ViewBag.EmpleadoId">
+                        <option></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Estado*</label>
+                    <select name="EstadoDenunciaId" class="form-control" asp-items="ViewBag.EstadoId">
+                        <option></option>
+                    </select>
+                    <span id="EstadoDenunciaIdValid" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-light" style="border-color: grey;" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-info" id="SaveButton">Guardar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

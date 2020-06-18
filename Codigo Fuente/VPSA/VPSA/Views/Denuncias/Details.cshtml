@@ -11,6 +11,8 @@
 
     if (Model != null)
     {
+        ViewData["DenunciaId"] = Model.Id;
+
         <div class="row">
             <div class="col-md-10 offset-1">
                 <div class="card">
@@ -28,13 +30,13 @@
                                                 @Html.DisplayNameFor(model => model.Fecha)
                                             </dt>
                                             <dd class="col-sm-8">
-                                                @(Model.Fecha.HasValue ? Model.Fecha.Value.ToString("dd/MM/yyyy HH:mm"): "")
+                                                @(Model.Fecha.HasValue ? Model.Fecha.Value.ToString("dd/MM/yyyy HH:mm") : "")
                                             </dd>
                                             <dt class="col-sm-4">
                                                 @Html.DisplayNameFor(model => model.Calle)
                                             </dt>
                                             <dd class="col-sm-8">
-                                                @(!string.IsNullOrWhiteSpace(Model.Calle) ? Model.Calle + " " +Model.Numero: "")
+                                                @(!string.IsNullOrWhiteSpace(Model.Calle) ? Model.Calle + " " + Model.Numero : "")
                                             </dd>
                                             <dt class="col-sm-4">
                                                 @Html.DisplayName("Entre Calles")
@@ -64,7 +66,7 @@
                                                 @Html.DisplayName("Estado Denuncia")
                                             </dt>
                                             <dd class="col-sm-8">
-                                                @(Model.EstadoDenuncia!=null ? Model.EstadoDenuncia.Nombre : "")
+                                                @(Model.EstadoDenuncia != null ? Model.EstadoDenuncia.Nombre : "")
                                             </dd>
                                         </dl>
                                     </div>
@@ -112,44 +114,19 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>
-                                                                    @Html.DisplayName("Fecha Trabajo")
+                                                                    @Html.DisplayName("FechaCreacion")
                                                                 </th>
                                                                 <th>
-                                                                    @Html.DisplayName("Empleado Asignado")
+                                                                    @Html.DisplayName("Empleado")
+                                                                </th>
+                                                                <th width="50%">
+                                                                    @Html.DisplayName("Descripcion")
                                                                 </th>
                                                                 <th>
-                                                                    @Html.DisplayName("Trabajo Realizado")
+                                                                    @Html.DisplayName("EstadoDenuncia")
                                                                 </th>
-                                                                <th>
-                                                                    @Html.DisplayName("Estado")
-                                                                </th>
-                                                                @*<th></th>*@
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
-                                                            @foreach (var item in comentarios.OrderByDescending(x => x.FechaCreacion).ToList())
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        @item.FechaCreacion.ToString("dd/MM/yyyy HH:mm")
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.Empleado.NombreCompleto
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.Descripcion
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.EstadoDenuncia.Nombre
-                                                                    </td>
-                                                                    @*<td>
-                                                                            <a asp-action="Edit" asp-controller="Comentarios" asp-route-id="@item.Id">Edit</a> |
-                                                                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                                                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                                                                        </td>*@
-                                                                </tr>
-                                                            }
-                                                        </tbody>
                                                     </table>
                                                 }
                                                 else
@@ -199,20 +176,38 @@
     }
 
 }
-<partial name="../Comentarios/_CreateModal" />
+
+<partial name="../Comentarios/_CreateModal" view-data="ViewData" />
 
 @section Scripts {
     <script src="~/lib/Datatables/datatables.min.js"></script>
     <script src="~/js/SaveComentarios.js"></script>
     <script>
         $(document).ready(function () {
+
             $("#Comentarios").DataTable({
+                "processing": true, // for show progress bar
+                "serverSide": true, // for process server side
+                "filter": true, // this is for disable filter (search box)
+                "orderMulti": false, // for disable multiple column at once
+                "pageLength": 10,
+                "ajax": {
+                    "url": "/Comentarios/LoadData",
+                    "type": "POST",
+                    "data": { denunciaId: @(Model != null ? Model.Id : (int?)null)},
+                    "datatype": "json"
+                },
                 "columnDefs": [{
                     "targets": [0, 1, 2, 3],
                     "visible": true,
-                    //"searchable": false,
                     "orderable": false
                 }],
+                "columns": [
+                    { "data": "fechaCreacion" },
+                    { "data": "empleado" },
+                    { "data": "descripcion" },
+                    { "data": "estadoDenuncia"}
+                ],
                 "language": {
                     "sProcessing": "Procesando...",
                     "sLengthMenu": "Mostrar _MENU_ registros",
@@ -242,6 +237,40 @@
                     }
                 }
             });
+
+
+            $(".inputValidation").hide();
+
+            $("#SaveButton").click(function (e) {
+
+                e.preventDefault();
+                $(".inputValidation").hide();
+                var inputToValid = $("#ComentarioForm").find(".inputRequired").toArray();
+                var count = 0;
+                inputToValid.forEach(function (input) {
+                    if (input.value == "") {
+                        $("#" + input.name + "Valid").show();
+                        count++;
+                    }
+                });
+                if (count == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Comentarios/Create",
+                        data: $("#ComentarioForm").serialize(),
+                        success: function (data) {
+                            if (data.success == true) {
+                                $('#modal-lg').modal('hide');
+                                $("#Comentarios").DataTable().ajax.reload();
+                                $("#ComentarioForm").find('input, select').val("");
+                                $("#Descripcion").text("");
+                                $("#Descripcion").val("");
+                            }
+                        }
+                    });
+                }
+            });
+
         });
     </script>
 }

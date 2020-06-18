@@ -49,7 +49,7 @@ namespace VPSA.Controllers
         // GET: Comentarios/Create
         public async Task<IActionResult> Create(int Id)
         {
-            var denuncia = await _context.Denuncias.Where(x=>x.Id == Id).Include(d => d.TipoDenuncia).FirstOrDefaultAsync();
+            var denuncia = await _context.Denuncias.Where(x => x.Id == Id).Include(d => d.TipoDenuncia).FirstOrDefaultAsync();
             ViewData["Denuncia"] = denuncia;
             ViewData["EstadoId"] = new SelectList(_context.Set<EstadoDenuncia>(), "Id", "Nombre");
             ViewData["EmpleadoId"] = new SelectList(_context.Set<Empleado>(), "Id", "NombreCompleto");
@@ -60,25 +60,16 @@ namespace VPSA.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Descripcion,DenunciaId,EmpleadoId,EstadoDenunciaId")] Comentario comentario)
         {
-            if (ModelState.IsValid)
-            {
-                var denuncia = await _context.Denuncias.FindAsync(comentario.DenunciaId);
-                denuncia.EstadoDenunciaId = comentario.EstadoDenunciaId;
-                comentario.FechaCreacion = DateTime.Now;
-                _context.Add(comentario);
-                _context.Update(denuncia);
-                await _context.SaveChangesAsync();
-
-
-
-                return RedirectToAction("Index", "Denuncias");
-            }
-            ViewData["DenunciaId"] = new SelectList(_context.Denuncias, "Id", "Id", comentario.DenunciaId);
-            ViewData["EmpleadoId"] = new SelectList(_context.Set<Empleado>(), "Id", "Id", comentario.EmpleadoId);
-            return View(comentario);
+            var denuncia = await _context.Denuncias.FindAsync(comentario.DenunciaId);
+            denuncia.EstadoDenunciaId = comentario.EstadoDenunciaId;
+            comentario.FechaCreacion = DateTime.Now;
+            _context.Add(comentario);
+            _context.Update(denuncia);
+            await _context.SaveChangesAsync();
+            return Ok(new { success = true, message = "Denuncia generada con Éxito" });
         }
 
         // GET: Comentarios/Edit/5
@@ -165,6 +156,70 @@ namespace VPSA.Controllers
             _context.Comentarios.Remove(comentario);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LoadData(int? denunciaId)
+        {
+            if (denunciaId == null)
+            {
+                return Json(new { draw = 0, recordsFiltered = 0, recordsTotal = 0, data = "[]" });
+            }
+
+            try
+            {
+                var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
+                // Skiping number of Rows count  
+                var start = Request.Form["start"].FirstOrDefault();
+                // Paging Length 10,20  
+                var length = Request.Form["length"].FirstOrDefault();
+                // Sort Column Name  
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                // Sort Column Direction ( asc ,desc)  
+                var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
+                // Search Value from (Search box)  
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+
+                //Paging Size (10,20,50,100)  
+                int pageSize = length != null ? Convert.ToInt32(length) : 10;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+                int recordsTotal = 0;
+
+                // Getting all Customer data  
+                var comentarios = await _context.Comentarios.Where(x => x.DenunciaId == denunciaId).OrderByDescending(x=>x.FechaCreacion).Select(x => new ComentarioViewModel
+                {
+                    FechaCreacion = x.FechaCreacion.ToString("dd/MM/yyyy HH:mm"),
+                    Empleado = x.Empleado.NombreCompleto,
+                    Descripcion = x.Descripcion,
+                    EstadoDenuncia = x.EstadoDenuncia.Nombre,
+                }).ToListAsync();
+
+                //Sorting  
+                //if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
+                //{
+                //    customerData = customerData.OrderBy(sortColumn + " " + sortColumnDirection);
+                //}
+                ////Search  
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                    comentarios = comentarios.Where(m => m.Descripcion.ToLower().Contains(searchValue.ToLower())
+                                || m.Empleado.ToLower().Contains(searchValue.ToLower()) 
+                                || m.EstadoDenuncia.ToLower().Contains(searchValue.ToLower())).ToList();
+                }
+
+                //total number of rows count   
+                recordsTotal = comentarios.Count();
+                //Paging   
+                var data = comentarios.Skip(skip).Take(pageSize).ToList();
+                //Returning Json Data  
+                return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
         }
 
         private bool ComentarioExists(int id)

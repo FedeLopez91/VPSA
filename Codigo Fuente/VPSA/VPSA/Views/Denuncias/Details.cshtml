@@ -6,6 +6,7 @@
 }
 <br />
 <link href="~/lib/Datatables/datatables.min.css" rel="stylesheet" />
+<link href="~/lib/toastr/toastr.min.css" rel="stylesheet" />
 @{
     var hasPhoto = Convert.ToBoolean(ViewBag.Hasphoto);
 
@@ -106,35 +107,24 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="col-sm-12">
-                                            @{
-
-                                                if (comentarios.Any())
-                                                {
-                                                    <table class="table" id="Comentarios">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>
-                                                                    @Html.DisplayName("FechaCreacion")
-                                                                </th>
-                                                                <th>
-                                                                    @Html.DisplayName("Empleado")
-                                                                </th>
-                                                                <th width="50%">
-                                                                    @Html.DisplayName("Descripcion")
-                                                                </th>
-                                                                <th>
-                                                                    @Html.DisplayName("EstadoDenuncia")
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                    </table>
-                                                }
-                                                else
-                                                {
-                                                    <p>No se han cargado trabajos</p>
-                                                }
-                                            }
-
+                                            <table class="table" id="Comentarios">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            @Html.DisplayName("FechaCreacion")
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayName("Empleado")
+                                                        </th>
+                                                        <th width="50%">
+                                                            @Html.DisplayName("Descripcion")
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayName("EstadoDenuncia")
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -181,7 +171,7 @@
 
 @section Scripts {
     <script src="~/lib/Datatables/datatables.min.js"></script>
-    <script src="~/js/SaveComentarios.js"></script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
     <script>
         $(document).ready(function () {
 
@@ -211,8 +201,8 @@
                 "language": {
                     "sProcessing": "Procesando...",
                     "sLengthMenu": "Mostrar _MENU_ registros",
-                    "sZeroRecords": "No se encontraron resultados",
-                    "sEmptyTable": "Ningún dato disponible en esta tabla",
+                    "sZeroRecords": "No se han encontraron resultados",
+                    "sEmptyTable": "No se han encontraron resultados",
                     "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
                     "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
                     "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
@@ -265,6 +255,12 @@
                                 $("#ComentarioForm").find('input, select').val("");
                                 $("#Descripcion").text("");
                                 $("#Descripcion").val("");
+                                $("#DenunciaId").val(data.denunciaId);
+                                toastr.success(data.message);
+                            } else {
+                                $('#modal-lg').modal('hide');
+                                $("#DenunciaId").val(data.denunciaId);
+                                toastr.error(data.message);
                             }
                         }
                     });

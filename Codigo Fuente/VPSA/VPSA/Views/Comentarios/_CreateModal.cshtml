@@ -15,10 +15,10 @@
             </div>
             <div class="modal-body">
                 <form id="ComentarioForm">
-                <input type="hidden" name="DenunciaId" value="@ViewData["DenunciaId"]" />
+                <input type="hidden" name="DenunciaId" id="DenunciaId" value="@ViewData["DenunciaId"]" />
                 <div class="form-group">
                     <label class="control-label">Trabajo*</label>
-                    <textarea name="Descripcion" class="form-control inputRequired" rows="5" cols="12"></textarea>
+                    <textarea name="Descripcion" id="Descripcion" class="form-control inputRequired" rows="5" cols="12"></textarea>
                     <span id="DescripcionValid" class="text-danger inputValidation">*Trabajo es Obligatorio</span>
                 </div>
                 <div class="form-group">

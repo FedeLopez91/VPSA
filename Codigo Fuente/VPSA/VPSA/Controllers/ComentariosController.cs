@@ -63,13 +63,21 @@ namespace VPSA.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Descripcion,DenunciaId,EmpleadoId,EstadoDenunciaId")] Comentario comentario)
         {
-            var denuncia = await _context.Denuncias.FindAsync(comentario.DenunciaId);
-            denuncia.EstadoDenunciaId = comentario.EstadoDenunciaId;
-            comentario.FechaCreacion = DateTime.Now;
-            _context.Add(comentario);
-            _context.Update(denuncia);
-            await _context.SaveChangesAsync();
-            return Ok(new { success = true, message = "Denuncia generada con Éxito" });
+            try
+            {
+                var denuncia = await _context.Denuncias.FindAsync(comentario.DenunciaId);
+                denuncia.EstadoDenunciaId = comentario.EstadoDenunciaId;
+                comentario.FechaCreacion = DateTime.Now;
+                _context.Add(comentario);
+                _context.Update(denuncia);
+                await _context.SaveChangesAsync();
+                return Ok(new { success = true, message = "Trabajo cargado con Éxito", denunciaId = comentario.DenunciaId });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { success = false, message = ex.Message, denunciaId = comentario.DenunciaId });
+            }
+
         }
 
         // GET: Comentarios/Edit/5
@@ -186,7 +194,7 @@ namespace VPSA.Controllers
                 int recordsTotal = 0;
 
                 // Getting all Customer data  
-                var comentarios = await _context.Comentarios.Where(x => x.DenunciaId == denunciaId).OrderByDescending(x=>x.FechaCreacion).Select(x => new ComentarioViewModel
+                var comentarios = await _context.Comentarios.Where(x => x.DenunciaId == denunciaId).OrderByDescending(x => x.FechaCreacion).Select(x => new ComentarioViewModel
                 {
                     FechaCreacion = x.FechaCreacion.ToString("dd/MM/yyyy HH:mm"),
                     Empleado = x.Empleado.NombreCompleto,
@@ -203,7 +211,7 @@ namespace VPSA.Controllers
                 if (!string.IsNullOrEmpty(searchValue))
                 {
                     comentarios = comentarios.Where(m => m.Descripcion.ToLower().Contains(searchValue.ToLower())
-                                || m.Empleado.ToLower().Contains(searchValue.ToLower()) 
+                                || m.Empleado.ToLower().Contains(searchValue.ToLower())
                                 || m.EstadoDenuncia.ToLower().Contains(searchValue.ToLower())).ToList();
                 }
 

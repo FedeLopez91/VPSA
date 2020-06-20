@@ -11,6 +11,8 @@ using VPSA.Data;
 using VPSA.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace VPSA.Controllers
 {
@@ -19,54 +21,26 @@ namespace VPSA.Controllers
         private readonly VPSAContext _context;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private readonly SignInManager<User> _signInManager;
 
-        public DenunciasController(VPSAContext context, IMapper mapper, IConfiguration configuration)
+        public DenunciasController(VPSAContext context, IMapper mapper, IConfiguration configuration, SignInManager<User> signInManager)
         {
             _context = context;
             _mapper = mapper;
             _configuration = configuration;
+            _signInManager = signInManager;
         }
 
         // GET: Denuncias
-        public ActionResult Index(string sortOrder)
+        public ActionResult Index()
         {
-            //Get all demands
-            var vPSAContext = _context.Denuncias.Include(d => d.EstadoDenuncia).Include(d => d.TipoDenuncia).OrderByDescending(o => o.Fecha);
+            if (_signInManager.IsSignedIn(User))
+            {
+                var vPSAContext = _context.Denuncias.Include(d => d.EstadoDenuncia).Include(d => d.TipoDenuncia).OrderByDescending(o => o.Fecha);
 
-            //Asks if you've been already here -> Change the sort order.
-            //ViewBag.FechaSortParam = sortOrder == "date" ? "date_desc" : "date";
-            //ViewBag.TypeDSortParam = sortOrder == "tipo_d" ? "tipo_d_desc" : "tipo_d";
-            //ViewBag.EstadoSortParam = sortOrder == "state" ? "state_desc" : "state";
-
-            //switch (sortOrder)
-            //{
-
-            //    //State field
-            //    case "state_desc":
-            //        vPSAContext = vPSAContext.OrderByDescending(o => o.EstadoDenuncia.Nombre);
-            //        break;
-            //    case "state":
-            //        vPSAContext = vPSAContext.OrderBy(o => o.EstadoDenuncia.Nombre);
-            //        break;
-
-            //    //Demand field
-            //    case "tipo_d":
-            //        vPSAContext = vPSAContext.OrderBy(o => o.TipoDenuncia.Nombre);
-            //        break;
-            //    case "tipo_d_desc":
-            //        vPSAContext = vPSAContext.OrderByDescending(o => o.TipoDenuncia.Nombre);
-            //        break;
-
-            //    //Date field
-            //    case "date":
-            //        vPSAContext = vPSAContext.OrderBy(o => o.Fecha);
-            //        break;
-            //    case "date_desc":
-            //        vPSAContext = vPSAContext.OrderByDescending(o => o.Fecha);
-            //        break;
-            //}
-
-            return View(vPSAContext.ToList());
+                return View(vPSAContext.ToList());
+            }
+            return RedirectToAction("Login", "Account");
         }
 
         // GET: Denuncias/Details/5
@@ -88,7 +62,7 @@ namespace VPSA.Controllers
 
             var PhotoUrl = _configuration.GetValue<string>("myKeys:PhotosUrl") + denuncia.NroDenuncia + ".jpg";
             ViewData["Comentarios"] = await _context.Comentarios.Where(x => x.DenunciaId == denuncia.Id)
-                .Include(d => d.EstadoDenuncia).Include(d => d.Empleado).OrderByDescending(x=>x.FechaCreacion).ToListAsync();
+                .Include(d => d.EstadoDenuncia).Include(d => d.User).OrderByDescending(x => x.FechaCreacion).ToListAsync();
             ViewBag.Hasphoto = false;
             if (System.IO.File.Exists(PhotoUrl))
             {
@@ -96,7 +70,7 @@ namespace VPSA.Controllers
             }
 
             ViewData["EstadoId"] = new SelectList(_context.Set<EstadoDenuncia>(), "Id", "Nombre");
-            ViewData["EmpleadoId"] = new SelectList(_context.Set<Empleado>(), "Id", "NombreCompleto");
+            ViewData["EmpleadoId"] = new SelectList(_context.Set<User>(), "Id", "NombreCompleto");
 
             return View(denuncia);
         }
@@ -154,7 +128,7 @@ namespace VPSA.Controllers
             if (denuncia != null)
             {
                 ViewData["Comentarios"] = await _context.Comentarios.Where(x => x.DenunciaId == denuncia.Id)
-                   .Include(d => d.EstadoDenuncia).Include(d => d.Empleado).ToListAsync();
+                   .Include(d => d.EstadoDenuncia).Include(d => d.User).ToListAsync();
                 var PhotoUrl = _configuration.GetValue<string>("myKeys:PhotosUrl") + denuncia.NroDenuncia + ".jpg";
 
                 ViewBag.Hasphoto = false;

@@ -1,10 +1,13 @@
 ﻿@model VPSA.Models.Denuncia
-
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 @{
     ViewData["Title"] = "Ver Denuncia";
     var comentarios = (List<VPSA.Models.Comentario>)ViewData["Comentarios"];
 }
 <br />
+
 <link href="~/lib/Datatables/datatables.min.css" rel="stylesheet" />
 <link href="~/lib/toastr/toastr.min.css" rel="stylesheet" />
 @{
@@ -100,9 +103,12 @@
                                     <div class="card-header">
                                         <div class="col-md-12">
                                             Historial Trabajo
-                                            <button type="button" class="btn btn-info btn-sm float-right" data-toggle="modal" data-target="#modal-lg">
-                                                Cargar Nuevo
-                                            </button>
+                                            @if (SignInManager.IsSignedIn(User))
+                                            {
+                                                <button type="button" class="btn btn-info btn-sm float-right" data-toggle="modal" data-target="#modal-lg">
+                                                    Cargar Nuevo
+                                                </button>
+                                            }
                                         </div>
                                     </div>
                                     <div class="card-body">

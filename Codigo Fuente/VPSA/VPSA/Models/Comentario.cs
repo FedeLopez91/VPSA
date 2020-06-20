@@ -15,11 +15,12 @@ namespace VPSA.Models
         public int DenunciaId { get; set; }
         public virtual Denuncia Denuncia { get; set; }
         [Required(ErrorMessage = "*Empleado Asignado Obligatorio")]
-        public int EmpleadoId { get; set; }
-        public virtual Empleado Empleado { get; set; }
+        public string UserId { get; set; }
+        public virtual User User { get; set; }
         [Required(ErrorMessage = "*Estado es Obligatorio")]
         public int EstadoDenunciaId { get; set; }
         public virtual EstadoDenuncia EstadoDenuncia { get; set; }
         public DateTime FechaCreacion { get; set; }
+
     }
 }

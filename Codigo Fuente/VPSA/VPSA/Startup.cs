@@ -10,6 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using VPSA.Data;
 using AutoMapper;
+using VPSA.Models;
+using Microsoft.AspNetCore.Identity;
+using VPSA.Factory;
 
 namespace VPSA
 {
@@ -27,9 +30,18 @@ namespace VPSA
         {
             services.AddDbContext<VPSAContext>(options =>
                     options.UseSqlite(Configuration.GetConnectionString("VPSAContext")));
-            
+
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddAutoMapper(typeof(Startup));
+
+            services.AddIdentity<User, IdentityRole>(opt =>
+            {
+                opt.Password.RequiredLength = 7;
+                opt.Password.RequireDigit = false;
+                opt.Password.RequireUppercase = false;
+            }).AddEntityFrameworkStores<VPSAContext>();
+
+            services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +60,7 @@ namespace VPSA
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

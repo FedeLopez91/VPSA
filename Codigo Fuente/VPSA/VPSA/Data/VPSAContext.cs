@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using VPSA.Models;
 
 namespace VPSA.Data
 {
-    public class VPSAContext : DbContext
+    public class VPSAContext : IdentityDbContext<User>
     {
         public VPSAContext(DbContextOptions<VPSAContext> options)
             : base(options)

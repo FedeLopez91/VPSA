@@ -22,7 +22,7 @@ namespace VPSA.Controllers
         // GET: Comentarios
         public async Task<IActionResult> Index()
         {
-            var vPSAContext = _context.Comentarios.Include(c => c.Denuncia).Include(c => c.Empleado);
+            var vPSAContext = _context.Comentarios.Include(c => c.Denuncia).Include(c => c.User);
             return View(await vPSAContext.ToListAsync());
         }
 
@@ -36,7 +36,7 @@ namespace VPSA.Controllers
 
             var comentario = await _context.Comentarios
                 .Include(c => c.Denuncia)
-                .Include(c => c.Empleado)
+                .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (comentario == null)
             {
@@ -61,7 +61,7 @@ namespace VPSA.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Descripcion,DenunciaId,EmpleadoId,EstadoDenunciaId")] Comentario comentario)
+        public async Task<IActionResult> Create([Bind("Descripcion,DenunciaId,UserId,EstadoDenunciaId")] Comentario comentario)
         {
             try
             {
@@ -94,7 +94,7 @@ namespace VPSA.Controllers
                 return NotFound();
             }
             ViewData["DenunciaId"] = new SelectList(_context.Denuncias, "Id", "Id", comentario.DenunciaId);
-            ViewData["EmpleadoId"] = new SelectList(_context.Set<Empleado>(), "Id", "Id", comentario.EmpleadoId);
+            ViewData["EmpleadoId"] = new SelectList(_context.Users, "Id", "Id", comentario.UserId);
             return View(comentario);
         }
 
@@ -131,7 +131,7 @@ namespace VPSA.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DenunciaId"] = new SelectList(_context.Denuncias, "Id", "Id", comentario.DenunciaId);
-            ViewData["EmpleadoId"] = new SelectList(_context.Set<Empleado>(), "Id", "Id", comentario.EmpleadoId);
+            ViewData["EmpleadoId"] = new SelectList(_context.Users, "Id", "Id", comentario.UserId);
             return View(comentario);
         }
 
@@ -145,7 +145,7 @@ namespace VPSA.Controllers
 
             var comentario = await _context.Comentarios
                 .Include(c => c.Denuncia)
-                .Include(c => c.Empleado)
+                .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (comentario == null)
             {
@@ -197,7 +197,7 @@ namespace VPSA.Controllers
                 var comentarios = await _context.Comentarios.Where(x => x.DenunciaId == denunciaId).OrderByDescending(x => x.FechaCreacion).Select(x => new ComentarioViewModel
                 {
                     FechaCreacion = x.FechaCreacion.ToString("dd/MM/yyyy HH:mm"),
-                    Empleado = x.Empleado.NombreCompleto,
+                    Empleado = x.User.NombreCompleto,
                     Descripcion = x.Descripcion,
                     EstadoDenuncia = x.EstadoDenuncia.Nombre,
                 }).ToListAsync();

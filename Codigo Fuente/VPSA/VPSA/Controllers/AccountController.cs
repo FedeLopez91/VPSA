@@ -28,6 +28,12 @@ namespace VPSA.Controllers
             _signInManager = signInManager;
         }
 
+        public async Task<IActionResult> Index()
+        {
+            var vPSAContext = await _context.Users.ToListAsync();
+            return View(vPSAContext);
+        }
+
         [HttpGet]
         public IActionResult Register()
         {

@@ -52,7 +52,7 @@ namespace VPSA.Controllers
             var denuncia = await _context.Denuncias.Where(x => x.Id == Id).Include(d => d.TipoDenuncia).FirstOrDefaultAsync();
             ViewData["Denuncia"] = denuncia;
             ViewData["EstadoId"] = new SelectList(_context.Set<EstadoDenuncia>(), "Id", "Nombre");
-            ViewData["EmpleadoId"] = new SelectList(_context.Set<Empleado>(), "Id", "NombreCompleto");
+            ViewData["EmpleadoId"] = new SelectList(_context.Set<User>(), "Id", "NombreCompleto");
             return View();
         }
 
@@ -71,6 +71,10 @@ namespace VPSA.Controllers
                 _context.Add(comentario);
                 _context.Update(denuncia);
                 await _context.SaveChangesAsync();
+
+                ViewData["EstadoId"] = new SelectList(_context.Set<EstadoDenuncia>(), "Id", "Nombre");
+                ViewData["EmpleadoId"] = new SelectList(_context.Set<User>(), "Id", "NombreCompleto");
+
                 return Ok(new { success = true, message = "Trabajo cargado con Éxito", denunciaId = comentario.DenunciaId });
             }
             catch (Exception ex)
@@ -197,6 +201,7 @@ namespace VPSA.Controllers
                 var comentarios = await _context.Comentarios.Where(x => x.DenunciaId == denunciaId).OrderByDescending(x => x.FechaCreacion).Select(x => new ComentarioViewModel
                 {
                     FechaCreacion = x.FechaCreacion.ToString("dd/MM/yyyy HH:mm"),
+                    Legajo = x.User.Legajo.ToString(),
                     Empleado = x.User.NombreCompleto,
                     Descripcion = x.Descripcion,
                     EstadoDenuncia = x.EstadoDenuncia.Nombre,

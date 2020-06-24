@@ -104,6 +104,10 @@ namespace VPSA.Controllers
                     return View();
                 }
             }
+            else
+            {
+                ModelState.AddModelError("", "El Usuario no existe en el Sistema");
+            }
             return View(userModel);
         }
 

@@ -138,6 +138,8 @@ namespace VPSA.Controllers
                 }
             }
 
+            ViewData["EstadoId"] = new SelectList(_context.Set<EstadoDenuncia>(), "Id", "Nombre");
+            ViewData["EmpleadoId"] = new SelectList(_context.Set<User>(), "Id", "NombreCompleto");
 
             return View("Details", denuncia);
         }

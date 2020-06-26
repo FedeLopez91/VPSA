@@ -70,7 +70,7 @@ namespace VPSA.Controllers
                 return View(userModel);
             }
 
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction("Index", "Account");
         }
 
         [HttpGet]

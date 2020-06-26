@@ -117,7 +117,7 @@
                             <li class="nav-item">
                                 <div class="form-inline">
                                     <i class="fas fa-user-circle" style="font-size: 30px;color: #2990CA;"></i>
-                                    @(UserFirstName.Value+""+ UserLastName.Value)
+                                    @(UserFirstName.Value+" "+ UserLastName.Value)
                                     <form class="form-inline" asp-controller="Account" asp-action="Logout">
                                         <button type="submit" class="btn btn-link text-info">Logout</button>
                                     </form>
